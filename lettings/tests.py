@@ -1,8 +1,9 @@
 from django.test import TestCase
 from .models import Letting, Address
 
+
 class LettingsModelTests(TestCase):
-    
+
     def test_address_str(self):
         """
         Test the string representation of the Address model.

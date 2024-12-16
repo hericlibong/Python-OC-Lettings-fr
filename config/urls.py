@@ -7,5 +7,5 @@ urlpatterns = [
     path('', include('oc_lettings_site.urls', namespace='oc_lettings_site')),
     path('lettings/', include('lettings.urls', namespace='lettings')),
     path('profiles/', include('profiles.urls', namespace='profiles')),
-    
+
 ]
