@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.urls import path, include
 # from django.conf.urls import handler404, handler500
 from django.views.defaults import page_not_found, server_error
