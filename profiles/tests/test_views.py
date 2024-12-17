@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from profiles.models import Profile
 
+
 class ProfilesViewsTest(TestCase):
     def setUp(self):
         # Créer des données de test pour les vues
@@ -17,7 +18,7 @@ class ProfilesViewsTest(TestCase):
         response = self.client.get(reverse('profiles:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profiles/index.html')
-        self.assertContains(response, 'testuser') # Vérifie que le nom d'utilisateur est affiché
+        self.assertContains(response, 'testuser')  # Vérifie que le nom d'utilisateur est affiché
 
     def test_profile_view(self):
         """
@@ -26,5 +27,5 @@ class ProfilesViewsTest(TestCase):
         response = self.client.get(reverse('profiles:profile', args=[self.user.username]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'profiles/profile.html')
-        self.assertContains(response, 'testuser') # Vérifie que le nom d'utilisateur est affiché
-        self.assertContains(response, 'Alençon') # Vérifie que la ville favorite est affichée
+        self.assertContains(response, 'testuser')   # Vérifie que le nom utilisateur est affiché
+        self.assertContains(response, 'Alençon')    # Vérifie que la ville favorite est affichée

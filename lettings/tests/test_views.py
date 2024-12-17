@@ -17,7 +17,7 @@ class LettingViewsTest(TestCase):
             title='Test Letting',
             address=address
         )
-    
+
     def test_index_view(self):
         response = self.client.get(reverse('lettings:index'))
         self.assertEqual(response.status_code, 200)
@@ -28,4 +28,3 @@ class LettingViewsTest(TestCase):
         response = self.client.get(reverse('lettings:letting', args=[letting.id]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lettings/letting.html')
-        
