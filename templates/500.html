@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Server Error{% endblock title %}
+
+{% block content %}
+<div class="container px-5 py-5 text-center">
+    <h1 class="display-4">500 - Server Error</h1>
+    <p class="lead">Oops! Something went wrong on our side. Please try again later.</p>
+    <a class="btn btn-primary" href="{% url 'oc_lettings_site:index' %}">Return to Home</a>
+</div>
+{% endblock %}
