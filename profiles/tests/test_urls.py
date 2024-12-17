@@ -5,9 +5,9 @@ from profiles.views import profile, index
 
 class ProfilesUrlsTest(SimpleTestCase):
     def test_index_url_resolves(self):
-        url = reverse('profiles')
+        url = reverse('profiles:index')
         self.assertEqual(resolve(url).func, index)
 
     def test_profile_url_resolves(self):
-        url = reverse('profile', args=['some-username'])
+        url = reverse('profiles:profile', args=['some-username'])
         self.assertEqual(resolve(url).func, profile)
