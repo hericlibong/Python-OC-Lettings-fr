@@ -5,6 +5,9 @@ from django.urls import path, include
 from django.views.defaults import page_not_found, server_error
 # from oc_lettings_site.views import cause_error
 
+# def trigger_error(request):
+#     division_by_zero = 1 / 0
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -13,7 +16,8 @@ urlpatterns = [
     path('profiles/', include('profiles.urls', namespace='profiles')),
     path('404/', lambda request: page_not_found(request, exception=None)),  # Test 404 page
     path('500/', lambda request: server_error(request)),  # Test 500 page
-    # path('error/', cause_error), Test error page
+   # path('sentry-debug/', trigger_error),
+   # path('error/', cause_error), # Test error page
 ]
 
 # # Test error page

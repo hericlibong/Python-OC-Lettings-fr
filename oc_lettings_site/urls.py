@@ -15,4 +15,6 @@ app_name = 'oc_lettings_site'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('test-logging/', views.test_logging, name='test_logging'),
+    # path('test-logging-except/', views.test_logging_except, name='test_logging_except'),
 ]

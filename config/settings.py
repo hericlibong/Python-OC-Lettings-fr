@@ -1,6 +1,62 @@
 import os
+import sentry_sdk
 
 from pathlib import Path
+from sentry_sdk.integrations.django import DjangoIntegration
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+# SENTRY CONFIGURATION
+
+sentry_sdk.init(
+    dsn=os.getenv('SENTRY_DSN'),
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+    _experiments={
+        "continuous_profiling_auto_start": True,
+    }
+)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # Ne désactive pas les loggers existants
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',  # Style Python 3.2+
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {  # Affiche les logs dans la console
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'sentry': {  # Envoie les logs à Sentry
+            'class': 'sentry_sdk.integrations.logging.EventHandler',
+            'level': 'ERROR',  # Capture uniquement les logs de niveau ERROR et supérieur
+        },
+    },
+    'loggers': {
+        'django': {  # Logger principal pour Django
+            'handlers': ['console', 'sentry'],  # Affiche dans la console et envoie à Sentry
+            'level': 'INFO',  # Niveau minimum : INFO
+            'propagate': True,  # Transmet les logs aux loggers parents
+        },
+        '': {  # Logger global (capture tout)
+            'handlers': ['console', 'sentry'],
+            'level': 'ERROR',  # Niveau minimum : ERROR
+            'propagate': False,
+        },
+    },
+}
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,12 +66,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'fp$9^593hsriajg$_%=5trot9g!1qa@ew(o-1#@=&4%=hp46(s'
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
