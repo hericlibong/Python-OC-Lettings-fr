@@ -14,33 +14,35 @@ def index(request):
     Returns:
         HttpResponse: The rendered 'oc_lettings_site/index.html' template.
     """
+    # logger.info('Homepage accessed')
     return render(request, 'oc_lettings_site/index.html')
+    
 
 
-def test_logging(request):
-    """
-    Test logging.
+# def test_logging(request):
+#     """
+#     Test logging.
 
-    Args:
-        request (HttpRequest): The HTTP request object.
+#     Args:
+#         request (HttpRequest): The HTTP request object.
 
-    Returns:
-        HttpResponse: The rendered 'oc_lettings_site/index.html' template.
-    """
-    logger.debug('This is a debug message')
-    logger.info('This is an info message')
-    logger.warning('This is a warning message')
-    logger.error('This is an error message')
-    logger.critical('This is a critical message')
-    return render(request, 'oc_lettings_site/index.html')
+#     Returns:
+#         HttpResponse: The rendered 'oc_lettings_site/index.html' template.
+#     """
+#     logger.debug('This is a debug message')
+#     logger.info('This is an info message')
+#     logger.warning('This is a warning message')
+#     logger.error('This is an error message')
+#     logger.critical('This is a critical message')
+#     return render(request, 'oc_lettings_site/index.html')
 
 
-def test_logging_except(request):
-    try:
-        division_by_zero = 1 / 0
-    except ZeroDivisionError as e:
-        logger.error("An error occurred: %s", e)
-        raise
+# def test_logging_except(request):
+#     try:
+#         division_by_zero = 1 / 0
+#     except ZeroDivisionError as e:
+#         logger.error("An error occurred: %s", e)
+#         raise
 
 
 

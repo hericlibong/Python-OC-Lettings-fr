@@ -1,5 +1,9 @@
+import logging
 from django.shortcuts import render
 from .models import Letting
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 def index(request):
@@ -12,9 +16,13 @@ def index(request):
     Returns:
         HttpResponse: The rendered 'lettings/index.html' template with all lettings.
     """
-    lettings_list = Letting.objects.all()
-    context = {'lettings_list': lettings_list}
-    return render(request, 'lettings/index.html', context)
+    try:
+        lettings_list = Letting.objects.all()
+        context = {'lettings_list': lettings_list}
+        return render(request, 'lettings/index.html', context)
+    except Exception as e:
+        logger.error(f"Error in lettings index view: {e}")
+        raise 
 
 
 def letting(request, letting_id):
@@ -28,9 +36,32 @@ def letting(request, letting_id):
     Returns:
         HttpResponse: The rendered 'lettings/letting.html' template with letting details.
     """
-    letting = Letting.objects.get(id=letting_id)
-    context = {
-        'title': letting.title,
-        'address': letting.address,
-    }
-    return render(request, 'lettings/letting.html', context)
+    try:
+        letting = Letting.objects.get(id=letting_id)
+        context = {
+            'title': letting.title,
+            'address': letting.address,
+        }
+        return render(request, 'lettings/letting.html', context)
+    except Letting.DoesNotExist:
+        logger.warning(f"Letting with ID {letting_id} does not exist.")
+        raise
+    except Exception as e:
+        logger.error(f"Error in lettings letting view: {e}")
+        raise
+
+    # try:
+    #     # Provoque une erreur volontairement
+    #     division_by_zero = 1 / 0  # Génère une ZeroDivisionError
+    #     letting = Letting.objects.get(id=letting_id)
+    #     context = {
+    #         'title': letting.title,
+    #         'address': letting.address,
+    #     }
+    #     return render(request, 'lettings/letting.html', context)
+    # except Letting.DoesNotExist:
+    #     logger.warning(f"Letting with ID {letting_id} does not exist.")
+    #     raise
+    # except Exception as e:
+    #     logger.error(f"Error in lettings letting view: {e}")
+    #     raise
