@@ -49,6 +49,11 @@ LOGGING = {
             'level': 'INFO',  # Niveau minimum : INFO
             'propagate': True,  # Transmet les logs aux loggers parents
         },
+        'lettings.views': {  # Ajoute explicitement lettings.views
+        'handlers': ['console'],
+        'level': 'ERROR',
+        'propagate': True,  # Active la propagation
+    },
         '': {  # Logger global (capture tout)
             'handlers': ['console', 'sentry'],
             'level': 'ERROR',  # Niveau minimum : ERROR

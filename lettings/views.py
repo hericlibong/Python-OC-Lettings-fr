@@ -43,25 +43,6 @@ def letting(request, letting_id):
             'address': letting.address,
         }
         return render(request, 'lettings/letting.html', context)
-    except Letting.DoesNotExist:
-        logger.warning(f"Letting with ID {letting_id} does not exist.")
-        raise
     except Exception as e:
         logger.error(f"Error in lettings letting view: {e}")
         raise
-
-    # try:
-    #     # Provoque une erreur volontairement
-    #     division_by_zero = 1 / 0  # Génère une ZeroDivisionError
-    #     letting = Letting.objects.get(id=letting_id)
-    #     context = {
-    #         'title': letting.title,
-    #         'address': letting.address,
-    #     }
-    #     return render(request, 'lettings/letting.html', context)
-    # except Letting.DoesNotExist:
-    #     logger.warning(f"Letting with ID {letting_id} does not exist.")
-    #     raise
-    # except Exception as e:
-    #     logger.error(f"Error in lettings letting view: {e}")
-    #     raise
