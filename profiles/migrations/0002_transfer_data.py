@@ -2,7 +2,7 @@ from django.db import migrations
 
 def transfer_profiles(apps, schema_editor):
     # Récupérer les anciens modèles
-    OldProfile = apps.get_model('oc_lettings_site', 'Profile')
+    OldProfile = apps.get_model('profiles', 'Profile')
     NewProfile = apps.get_model('profiles', 'Profile')
 
     # Copier les données de l'ancien modèle vers le nouveau

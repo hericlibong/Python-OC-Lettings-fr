@@ -49,3 +49,19 @@ class ProfilesViewsTest(TestCase):
                     any("Error in profiles index view: Test exception" in message for message in log.output),
                     f"Actual logs: {log.output}"
                 )
+
+    def test_profile_view_logs_error(self):
+        """
+        Test que la vue profile journalise une erreur et lève une exception en cas d'erreur.
+        """
+        # Utiliser un mock pour simuler une exception dans Profile.objects.get
+        with patch("profiles.models.Profile.objects.get", side_effect=Exception("Test exception")):
+            with self.assertLogs(logger, level="ERROR") as log:
+                with self.assertRaises(Exception):  # Vérifie que l'exception est levée
+                    self.client.get(reverse("profiles:profile", args=["testuser"]))
+
+                # Vérifie que le message d'erreur attendu est bien journalisé
+                self.assertTrue(
+                    any("Error in profiles profile view: Test exception" in message for message in log.output),
+                    f"Logs enregistrés : {log.output}",
+                )

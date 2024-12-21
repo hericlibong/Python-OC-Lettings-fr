@@ -2,8 +2,8 @@ from django.db import migrations
 
 def transfer_lettings(apps, schema_editor):
     # Récupérer les anciens modèles
-    OldAddress = apps.get_model('oc_lettings_site', 'Address')
-    OldLetting = apps.get_model('oc_lettings_site', 'Letting')
+    OldAddress = apps.get_model('lettings', 'Address')
+    OldLetting = apps.get_model('lettings', 'Letting')
 
     NewAddress = apps.get_model('lettings', 'Address')
     NewLetting = apps.get_model('lettings', 'Letting')
