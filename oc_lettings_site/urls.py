@@ -1,13 +1,20 @@
-# from django.contrib import admin
-from django.urls import path
+"""
+URL configuration for the oc_lettings_site application.
 
-# from . import views
+This module defines the routes for the homepage of the project.
+
+Namespace:
+    'oc_lettings_site' - Used to avoid conflicts with other applications' URLs.
+"""
+
+
+from django.urls import path
+from . import views
+
+app_name = 'oc_lettings_site'
 
 urlpatterns = [
-    # path('', views.index, name='index'),
-    # path('lettings/', views.lettings_index, name='lettings_index'),
-    # path('lettings/<int:letting_id>/', views.letting, name='letting'),
-    # path('profiles/', views.profiles_index, name='profiles_index'),
-    # path('profiles/<str:username>/', views.profile, name='profile'),
-    # path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    # path('test-logging/', views.test_logging, name='test_logging'),
+    # path('test-logging-except/', views.test_logging_except, name='test_logging_except'),
 ]
