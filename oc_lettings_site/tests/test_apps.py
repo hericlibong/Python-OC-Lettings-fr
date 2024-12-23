@@ -1,6 +1,7 @@
 from django.apps import apps
 from oc_lettings_site.apps import OCLettingsSiteConfig
 
+
 def test_oc_lettings_site_app():
     """
     Test that the OCLettingsSiteConfig is correctly registered in Django.

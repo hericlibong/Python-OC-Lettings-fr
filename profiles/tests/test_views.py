@@ -35,7 +35,6 @@ class ProfilesViewsTest(TestCase):
         self.assertContains(response, 'testuser')   # Vérifie que le nom utilisateur est affiché
         self.assertContains(response, 'Alençon')    # Vérifie que la ville favorite est affichée
 
-    
     def test_index_view_logs_error(self):
         """
         Test that the index view logs an error and raises an exception when an error occurs.
@@ -46,7 +45,8 @@ class ProfilesViewsTest(TestCase):
                     self.client.get(reverse('profiles:index'))
                 # Vérifie que le log contient le message attendu
                 self.assertTrue(
-                    any("Error in profiles index view: Test exception" in message for message in log.output),
+                    any("Error in profiles index view: Test exception" in message
+                        for message in log.output),
                     f"Actual logs: {log.output}"
                 )
 
@@ -62,6 +62,7 @@ class ProfilesViewsTest(TestCase):
 
                 # Vérifie que le message d'erreur attendu est bien journalisé
                 self.assertTrue(
-                    any("Error in profiles profile view: Test exception" in message for message in log.output),
-                    f"Logs enregistrés : {log.output}",
+                    any("Error in profiles profile view: Test exception" in message
+                        for message in log.output),
+                    f"Logs enregistrés: {log.output}",
                 )

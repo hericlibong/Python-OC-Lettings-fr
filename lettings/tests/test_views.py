@@ -33,7 +33,6 @@ class LettingViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lettings/letting.html')
 
-
     def test_index_view_logs_error(self):
         """
         Test that an exception in the index view is logged and raised.
@@ -46,7 +45,8 @@ class LettingViewsTest(TestCase):
                     self.client.get(reverse('lettings:index'))
                 # Vérifier que le message d'erreur est bien dans les logs
                 self.assertTrue(
-                    any("Error in lettings index view: Test exception" in message for message in log.output)
+                    any("Error in lettings index view: Test exception" in message
+                        for message in log.output)
                 )
 
     def test_letting_view_logs_error(self):
@@ -62,13 +62,7 @@ class LettingViewsTest(TestCase):
                     self.client.get(reverse('lettings:letting', args=[invalid_id]))
                 # Verify the log message contains the expected error
                 self.assertTrue(
-                    any("Error in lettings letting view: Test exception" in message for message in log.output),
+                    any("Error in lettings letting view: Test exception" in message
+                        for message in log.output),
                     f"Actual logs: {log.output}"
                 )
-
-
-
-
-
-
-    

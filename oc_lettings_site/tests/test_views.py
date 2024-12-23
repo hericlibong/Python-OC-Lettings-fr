@@ -28,6 +28,9 @@ class OcLettingsSiteViewsTest(TestCase):
 
                 # Vérifie que le message attendu est journalisé
                 self.assertTrue(
-                    any("Error in oc_lettings_site index view: Test exception" in message for message in log.output),
-                    f"Logs enregistrés : {log.output}",
+                    any(
+                        "Error in oc_lettings_site index view: Test exception" in message
+                        for message in log.output
+                    ),
+                    f"Logs enregistrés: {log.output}",
                 )

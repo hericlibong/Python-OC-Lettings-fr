@@ -42,5 +42,3 @@ def profile(request, username):
     except Exception as e:
         logger.error(f"Error in profiles profile view: {e}")
         raise
-
-    

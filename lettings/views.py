@@ -11,7 +11,7 @@ def index(request):
     Render the list of lettings.
 
     Args:
-        request (HttpRequest): The HTTP request object.
+        request (HttpRequest): The HTTP request object.e
 
     Returns:
         HttpResponse: The rendered 'lettings/index.html' template with all lettings.
@@ -22,7 +22,7 @@ def index(request):
         return render(request, 'lettings/index.html', context)
     except Exception as e:
         logger.error(f"Error in lettings index view: {e}")
-        raise 
+        raise
 
 
 def letting(request, letting_id):
