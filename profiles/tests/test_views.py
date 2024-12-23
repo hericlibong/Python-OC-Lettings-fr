@@ -5,7 +5,6 @@ from profiles.models import Profile
 from unittest.mock import patch
 import logging
 
-
 logger = logging.getLogger('profiles.views')
 
 
