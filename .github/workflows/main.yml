@@ -51,8 +51,8 @@ jobs:
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
       - name: Build and tag Docker image
-        run: docker build -t my_app:${{ github.sha }} .  # Construit l'image Docker et utilise le hash du commit comme tag
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} .  # Construit l'image Docker et utilise le hash du commit comme tag
 
       - name: Push Docker image to Docker Hub
-        run: docker push my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
 
