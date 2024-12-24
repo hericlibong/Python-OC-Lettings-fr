@@ -1,4 +1,4 @@
-name : CI Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -6,51 +6,45 @@ on:
       - master  # Exécute le pipeline sur chaque commit dans master
   pull_request:
     branches:
-      - master  # Exécute le pipeline sur chaque pull request vers master
+      - master  # Exécute également sur chaque pull request vers master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3  # Récupère le code source du repository
-    
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.12'  # Version de Python à utiliser
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    # Lancer le linting avec Flake8
-    - name: Run Flake8
-      run: |
-        pip install flake8
-        flake8 . 
-
-    # Lancer les tests unitaires
-    - name: Run tests with pytest
-      run: |
-        pip install pytest pytest-cov
-        pytest --cov=. --cov-report=term-missing
-
-  
-  validate-docker-login:  # Job temporaire pour vérifier Docker hu login
-    needs: build  # Attend la fin du job build
+  build:  # Job pour les tests et le linting
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Validate Docker login
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: |
-        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'  # Version de Python à utiliser
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
+      - name: Run Flake8
+        run: |
+          pip install flake8
+          flake8 .
+
+      - name: Run tests with pytest
+        run: |
+          pip install pytest pytest-cov
+          pytest --cov=. --cov-report=term-missing
+
+  validate-docker-login:  # Job temporaire pour valider Docker login
+    needs: build  # Exécuter uniquement si le job 'build' réussit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Validate Docker login
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
