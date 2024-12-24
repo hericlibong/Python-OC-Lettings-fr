@@ -14,14 +14,17 @@ COPY . /app
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Etape 5: Collecter les fichiers statiques pour la production
+# Étape 5 : Définir les variables d'environnement nécessaires pour Django
+ENV SECRET_KEY="a_secure_default_key_for_docker"
+
+# Etape 6: Collecter les fichiers statiques pour la production
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Etape 6: Exposer le port pour accéder à l'application
+# Etape 7: Exposer le port pour accéder à l'application
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-# Etape 7: Commmande par défaut pour démarrer l'application
+# Etape 8: Commmande par défaut pour démarrer l'application
 # Default command to run when the container starts
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
