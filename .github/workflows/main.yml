@@ -38,21 +38,21 @@ jobs:
           pytest --cov=. --cov-report=term-missing
 
   containerize:
-  needs: build  # S'exécute uniquement si le job 'build' réussit
-  runs-on: ubuntu-latest  # Utilise une machine virtuelle Ubuntu
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3  # Clone le code du dépôt
+    needs: build  # S'exécute uniquement si le job 'build' réussit
+    runs-on: ubuntu-latest  # Utilise une machine virtuelle Ubuntu
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Clone le code du dépôt
 
-    - name: Log in to Docker Hub
-      env:  # Définit les variables d'environnement pour l'étape
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+      - name: Log in to Docker Hub
+        env:  # Définit les variables d'environnement pour l'étape
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
-    - name: Build and tag Docker image
-      run: docker build -t my_app:${{ github.sha }} .  # Construit l'image Docker et utilise le hash du commit comme tag
+      - name: Build and tag Docker image
+        run: docker build -t my_app:${{ github.sha }} .  # Construit l'image Docker et utilise le hash du commit comme tag
 
-    - name: Push Docker image to Docker Hub
-      run: docker push my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
+      - name: Push Docker image to Docker Hub
+        run: docker push my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
 
