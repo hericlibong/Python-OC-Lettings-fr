@@ -32,7 +32,7 @@ jobs:
 
       - name: Run tests with pytest
         env:
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
           pip install pytest pytest-cov
           pytest --cov=. --cov-report=term-missing
