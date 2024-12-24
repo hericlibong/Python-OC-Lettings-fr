@@ -37,16 +37,22 @@ jobs:
           pip install pytest pytest-cov
           pytest --cov=. --cov-report=term-missing
 
-  validate-docker-login:  # Job temporaire pour valider Docker login
-    needs: build  # Exécuter uniquement si le job 'build' réussit
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  containerize:
+  needs: build  # S'exécute uniquement si le job 'build' réussit
+  runs-on: ubuntu-latest  # Utilise une machine virtuelle Ubuntu
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3  # Clone le code du dépôt
 
-      - name: Validate Docker login
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    - name: Log in to Docker Hub
+      env:  # Définit les variables d'environnement pour l'étape
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+    - name: Build and tag Docker image
+      run: docker build -t my_app:${{ github.sha }} .  # Construit l'image Docker et utilise le hash du commit comme tag
+
+    - name: Push Docker image to Docker Hub
+      run: docker push my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
+
