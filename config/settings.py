@@ -173,10 +173,20 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+# Base URL to serve static files
+STATIC_URL = '/static/'
+
+# Directory to collect static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static",]
+# Additional locations of static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Répertoire contenant les fichiers statiques de l'application
+]
+
+# Optionnel : si vous utilisez un CDN ou un service externe pour les fichiers statiques
+# STATIC_URL = 'https://<your-cdn-url>/static/'
+
+# Ajout pour le cache des fichiers statiques
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
