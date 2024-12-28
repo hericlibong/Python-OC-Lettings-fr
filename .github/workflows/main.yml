@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master  # Exécute le pipeline sur chaque commit dans master
+      - experimental/deploy-test
   pull_request:
     branches:
       - master  # Exécute également sur chaque pull request vers master
@@ -31,14 +32,17 @@ jobs:
           flake8 .
 
       - name: Run tests with pytest
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/experimental/deploy-test'  # Exécute les tests uniquement sur master et experimental
         env:
           SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
           pip install pytest pytest-cov
           pytest --cov=. --cov-report=term-missing
+          echo "This steps runs only on master and experimental branches"
 
   containerize:
     needs: build  # S'exécute uniquement si le job 'build' réussit
+    if : github.ref == 'refs/heads/master' || github.ref == 'refs/heads/experimental/deploy-test'  # Exécute uniquement
     runs-on: ubuntu-latest  # Utilise une machine virtuelle Ubuntu
     steps:
       - name: Checkout repository
@@ -55,4 +59,22 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
+
+  deploy:
+    name: Deploy to Render
+    needs: containerize
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/experimental/deploy-test'  # Exécute uniquement sur master et experimental
+    steps:
+      - name: Trigger Render Deploy
+        run: |
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"image": "my-dockerhub-repo/myapp:'"${{ github.sha }}"'"}'
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+  
+
+
 
