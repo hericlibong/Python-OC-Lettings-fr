@@ -80,7 +80,7 @@ jobs:
           curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"image": "my-dockerhub-repo/myapp:'"${{ github.sha }}"'"}'
+            -d '{"image": "docker.io/'"${{ secrets.DOCKER_USERNAME }}"'/my_app:latest"}'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
   
