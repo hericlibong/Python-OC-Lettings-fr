@@ -81,7 +81,6 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{"image": "my-dockerhub-repo/myapp:'"${{ github.sha }}"'"}'
-          echo "Deployed image: "my-dockerhub-repo/myapp:${{ github.sha }}"
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
   
