@@ -55,10 +55,19 @@ jobs:
         run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
       - name: Build and tag Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} .  # Construit l'image Docker et utilise le hash du commit comme tag
+      # Ajout d'un tag unique pour éviter tout conflit avec l'image précédente
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my_app:latest
 
       - name: Push Docker image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
+          docker push ${{ secrets.DOCKER_USERNAME }}/my_app:latest  # Ajout de la version "latest"
+
+        # Ajout d'un délai pour s'assurer que l'image est disponible sur Docker Hub
+      - name: Wait for Docker image to be available
+        run: sleep 30
 
   deploy:
     name: Deploy to Render
@@ -72,6 +81,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{"image": "my-dockerhub-repo/myapp:'"${{ github.sha }}"'"}'
+          echo "Deployed image: "my-dockerhub-repo/myapp:${{ github.sha }}"
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
   
