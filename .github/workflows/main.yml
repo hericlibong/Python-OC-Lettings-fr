@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master  # Exécute le pipeline sur chaque commit dans master
-      - experimental/deploy-test
+      - feature/*  # Exécute le pipeline sur chaque commit dans une branche feature
   pull_request:
     branches:
       - master  # Exécute également sur chaque pull request vers master
@@ -27,12 +27,13 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run Flake8
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/*'  # Exécute le linting sur master et les branches feature
         run: |
           pip install flake8
           flake8 .
 
       - name: Run tests with pytest
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/experimental/deploy-test'  # Exécute les tests uniquement sur master et experimental
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/*'  # Exécute le linting sur master et les branches feature 
         env:
           SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
@@ -42,7 +43,7 @@ jobs:
 
   containerize:
     needs: build  # S'exécute uniquement si le job 'build' réussit
-    if : github.ref == 'refs/heads/master' || github.ref == 'refs/heads/experimental/deploy-test'  # Exécute uniquement
+    if : github.ref == 'refs/heads/master' # Exécute uniquement le containerize sur master
     runs-on: ubuntu-latest  # Utilise une machine virtuelle Ubuntu
     steps:
       - name: Checkout repository
@@ -60,10 +61,11 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} .
           docker tag ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my_app:latest
 
+      # Pousse l'image Docker sur Docker Hub et Ajout de la version "latest"
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }}  # Pousse l'image Docker sur Docker Hub
-          docker push ${{ secrets.DOCKER_USERNAME }}/my_app:latest  # Ajout de la version "latest"
+          docker push ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }}  
+          docker push ${{ secrets.DOCKER_USERNAME }}/my_app:latest  
 
         # Ajout d'un délai pour s'assurer que l'image est disponible sur Docker Hub
       - name: Wait for Docker image to be available
@@ -72,8 +74,8 @@ jobs:
   deploy:
     name: Deploy to Render
     needs: containerize
+    if: github.ref == 'refs/heads/master' # Exécute uniquement sur master
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/experimental/deploy-test'  # Exécute uniquement sur master et experimental
     steps:
       - name: Trigger Render Deploy
         run: |
@@ -84,6 +86,3 @@ jobs:
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
   
-
-
-
