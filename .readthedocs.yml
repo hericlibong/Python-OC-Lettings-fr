@@ -1,0 +1,18 @@
+# .readthedocs.yml
+
+version: 2
+
+# Configuration du système
+build:
+  os: ubuntu-22.04  # par défaut
+  tools:
+    python: "3.12"  # Version de Python utilisée pour le projet
+
+# Configuration pour Sphinx
+sphinx:
+  configuration: doc/source/conf.py  # Chemin vers le fichier de configuration de Sphinx
+
+# Dépendances Python nécessaires
+python:
+  install:
+    - requirements: requirements.txt  # Installera les dépendances listées dans ce fichier
