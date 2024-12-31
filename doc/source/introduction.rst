@@ -26,9 +26,9 @@ Structure de l'application
 
 L'application est divisée en plusieurs modules ou **applications Django** :
 
-- ``oc_lettings_site`` : Gère uniquement la page d'accueil du projet, sans modèles associés.
-- **``lettings``** : Gère les biens immobiliers et leurs informations.
-- **``profiles``** : Gère les informations des utilisateurs (profils).
+- **oc_lettings_site** : Gère uniquement la page d'accueil du projet, sans modèles associés.
+- **lettings** : Gère les biens immobiliers et leurs informations.
+- **profiles** : Gère les informations des utilisateurs (profils).
 
 Technologies utilisées
 -----------------------
