@@ -1,5 +1,6 @@
 import os
 import sys
+import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('../..'))  # Ajout du chemin du projet pour accéder aux modules
 
 # Configuration file for the Sphinx documentation builder.
@@ -22,6 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',  # Pour générer la documentation à partir des docstrings
     'sphinx.ext.viewcode',  # Pour générer des liens vers le code source
     'sphinx.ext.napoleon',  # Pour gérer les docstrings Google et Numpy
+    'sphinx_rtd_theme',  # Pour utiliser le thème Read the Docs
 ]
 
 templates_path = ['_templates']
@@ -32,5 +34,5 @@ language = 'fr'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = "sphinx_rtd_theme"
 html_static_path = ['_static']
