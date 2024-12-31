@@ -6,6 +6,7 @@ Bienvenue dans la documentation de **Python OC Lettings**, une application web d
 Objectifs principaux
 ---------------------
 L'objectif de ce projet est de fournir une plateforme où les utilisateurs peuvent :
+
 - **Créer, consulter et modifier des profils personnels.**
 - **Ajouter et gérer des annonces de locations immobilières.**
 
@@ -25,13 +26,14 @@ Structure de l'application
 ---------------------------
 L'application est divisée en plusieurs modules ou **applications Django** :
 
-- **`oc_lettings_site`** : Gère uniquement la page d'accueil du projet, sans modèles associés.
-- **`lettings`** : Gère les biens immobiliers et leurs informations.
-- **`profiles`** : Gère les informations des utilisateurs (profils).
+- ``oc_lettings_site`` : Gère uniquement la page d'accueil du projet, sans modèles associés.
+- ``lettings`` : Gère les biens immobiliers et leurs informations.
+- ``profiles`` : Gère les informations des utilisateurs (profils).
 
 Technologies utilisées
 -----------------------
 Ce projet utilise les technologies et outils suivants :
+
 - **Framework Django** (v5.1.4) : Pour la gestion back-end.
 - **Python** : Développé avec la version 3.12, compatible avec 3.10 minimum.
 - **Sentry** : Intégré pour le suivi des erreurs et la journalisation.
