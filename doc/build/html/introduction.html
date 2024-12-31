@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>introduction &mdash; Documentation Python OC Lettings 0.0.0.1</title>
+  <title>Introduction &mdash; Documentation Python OC Lettings 0.0.0.1</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -45,9 +45,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">introduction</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#objectifs-principaux">Objectifs principaux</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fonctionnalites-principales">Fonctionnalités principales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fonctionnalites-principales">Fonctionnalités principales</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gestion-des-profils-utilisateurs">Gestion des profils utilisateurs :</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gestion-des-biens-immobiliers">Gestion des biens immobiliers :</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#structure-de-l-application">Structure de l’application</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#technologies-utilisees">Technologies utilisées</a></li>
 </ul>
@@ -75,7 +79,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">introduction</li>
+      <li class="breadcrumb-item active">Introduction</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/introduction.rst.txt" rel="nofollow"> Afficher la source de la page</a>
       </li>
@@ -86,43 +90,54 @@
            <div itemprop="articleBody">
              
   <section id="introduction">
-<h1>introduction<a class="headerlink" href="#introduction" title="Lien vers cette rubrique"></a></h1>
+<h1>Introduction<a class="headerlink" href="#introduction" title="Lien vers cette rubrique"></a></h1>
 <p>Bienvenue dans la documentation de <strong>Python OC Lettings</strong>, une application web développée en Django qui vise à simplifier la gestion des profils utilisateurs et des biens immobiliers.</p>
 <section id="objectifs-principaux">
 <h2>Objectifs principaux<a class="headerlink" href="#objectifs-principaux" title="Lien vers cette rubrique"></a></h2>
-<p>L’objectif de ce projet est de fournir une plateforme où les utilisateurs peuvent :
-- <strong>Créer, consulter et modifier des profils personnels.</strong>
-- <strong>Ajouter et gérer des annonces de locations immobilières.</strong></p>
+<p>L’objectif de ce projet est de fournir une plateforme où les utilisateurs peuvent :</p>
+<ul class="simple">
+<li><p><strong>Créer, consulter et modifier des profils personnels.</strong></p></li>
+<li><p><strong>Ajouter et gérer des annonces de locations immobilières.</strong></p></li>
+</ul>
 </section>
 <section id="fonctionnalites-principales">
 <h2>Fonctionnalités principales<a class="headerlink" href="#fonctionnalites-principales" title="Lien vers cette rubrique"></a></h2>
-<p>### Gestion des profils utilisateurs :
-- Création, modification et affichage des profils.
-- Association des profils aux biens immobiliers.</p>
-<p>### Gestion des biens immobiliers :
-- Ajout et modification des annonces.
-- Affichage des détails de chaque bien immobilier.</p>
+<section id="gestion-des-profils-utilisateurs">
+<h3>Gestion des profils utilisateurs :<a class="headerlink" href="#gestion-des-profils-utilisateurs" title="Lien vers cette rubrique"></a></h3>
+<ul class="simple">
+<li><p>Création, modification et affichage des profils.</p></li>
+<li><p>Association des profils aux biens immobiliers.</p></li>
+</ul>
+</section>
+<section id="gestion-des-biens-immobiliers">
+<h3>Gestion des biens immobiliers :<a class="headerlink" href="#gestion-des-biens-immobiliers" title="Lien vers cette rubrique"></a></h3>
+<ul class="simple">
+<li><p>Ajout et modification des annonces.</p></li>
+<li><p>Affichage des détails de chaque bien immobilier.</p></li>
+</ul>
+</section>
 </section>
 <section id="structure-de-l-application">
 <h2>Structure de l’application<a class="headerlink" href="#structure-de-l-application" title="Lien vers cette rubrique"></a></h2>
-<p>L’application est divisée en plusieurs modules ou <strong>applications Django</strong> :</p>
+<p>L’application est divisée en plusieurs modules ou <strong>applications Django</strong> :</p>
 <ul class="simple">
-<li><p><strong>`oc_lettings_site`</strong> : Gère uniquement la page d’accueil du projet, sans modèles associés.</p></li>
-<li><p><strong>`lettings`</strong> : Gère les biens immobiliers et leurs informations.</p></li>
-<li><p><strong>`profiles`</strong> : Gère les informations des utilisateurs (profils).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">oc_lettings_site</span></code> : Gère uniquement la page d’accueil du projet, sans modèles associés.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lettings</span></code> : Gère les biens immobiliers et leurs informations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">profiles</span></code> : Gère les informations des utilisateurs (profils).</p></li>
 </ul>
 </section>
 <section id="technologies-utilisees">
 <h2>Technologies utilisées<a class="headerlink" href="#technologies-utilisees" title="Lien vers cette rubrique"></a></h2>
-<p>Ce projet utilise les technologies et outils suivants :
-- <strong>Framework Django</strong> (v5.1.4) : Pour la gestion back-end.
-- <strong>Python</strong> : Développé avec la version 3.12, compatible avec 3.10 minimum.
-- <strong>Sentry</strong> : Intégré pour le suivi des erreurs et la journalisation.
-- <strong>Render</strong> : Déploiement de l’application grâce à une pipeline CI/CD robuste.
-- <strong>Read the Docs</strong> : Utilisé pour cette documentation.
-- <strong>GitHub</strong> : Versionnement et gestion du code source.</p>
-<p>—</p>
-<p>Nous vous invitons à explorer les différentes sections de cette documentation pour mieux comprendre le fonctionnement et la structure de cette application. Bonne lecture !</p>
+<p>Ce projet utilise les technologies et outils suivants :</p>
+<ul class="simple">
+<li><p><strong>Framework Django</strong> (v5.1.4) : Pour la gestion back-end.</p></li>
+<li><p><strong>Python</strong> : Développé avec la version 3.12, compatible avec 3.10 minimum.</p></li>
+<li><p><strong>Sentry</strong> : Intégré pour le suivi des erreurs et la journalisation.</p></li>
+<li><p><strong>Render</strong> : Déploiement de l’application grâce à un pipeline CI/CD robuste.</p></li>
+<li><p><strong>Read the Docs</strong> : Utilisé pour cette documentation.</p></li>
+<li><p><strong>GitHub</strong> : Versionnement et gestion du code source.</p></li>
+</ul>
+<p>Nous vous invitons à explorer les différentes sections de cette documentation pour mieux comprendre le fonctionnement et la structure de cette application. Bonne lecture !</p>
 </section>
 </section>
 

@@ -1,4 +1,4 @@
-introduction
+Introduction
 ============
 
 Bienvenue dans la documentation de **Python OC Lettings**, une application web développée en Django qui vise à simplifier la gestion des profils utilisateurs et des biens immobiliers.
@@ -13,12 +13,12 @@ L'objectif de ce projet est de fournir une plateforme où les utilisateurs peuve
 Fonctionnalités principales
 ----------------------------
 Gestion des profils utilisateurs :
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - Création, modification et affichage des profils.
 - Association des profils aux biens immobiliers.
 
 Gestion des biens immobiliers :
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - Ajout et modification des annonces.
 - Affichage des détails de chaque bien immobilier.
 

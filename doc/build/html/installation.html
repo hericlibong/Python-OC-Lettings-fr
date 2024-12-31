@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
     <link rel="next" title="architecture" href="architecture.html" />
-    <link rel="prev" title="introduction" href="introduction.html" /> 
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,8 +45,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequis">Prérequis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clonage-du-projet">Clonage du projet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-des-dependances">Installation des dépendances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-des-variables-d-environnement">Configuration des variables d’environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#base-de-donnees">Base de données</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lancement-du-serveur">Lancement du serveur</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Globale</a></li>
@@ -81,14 +89,77 @@
              
   <section id="installation">
 <h1>installation<a class="headerlink" href="#installation" title="Lien vers cette rubrique"></a></h1>
-<p>Ce document décrit comment installer l’application.</p>
+<p>Ce guide explique comment configurer le projet <strong>Python OC Lettings</strong> en local.</p>
+<section id="prerequis">
+<h2>Prérequis<a class="headerlink" href="#prerequis" title="Lien vers cette rubrique"></a></h2>
+<p>Assurez-vous que votre environnement dispose des éléments suivants :</p>
+<ul class="simple">
+<li><p>Python 3.10 ou 3.12 installé.</p></li>
+<li><p>Git installé pour cloner le dépôt.</p></li>
+<li><p>Un environnement virtuel configuré (optionnel mais recommandé).</p></li>
+</ul>
+</section>
+<section id="clonage-du-projet">
+<h2>Clonage du projet<a class="headerlink" href="#clonage-du-projet" title="Lien vers cette rubrique"></a></h2>
+<p>Cloner le dépôt en exécutant la commande suivante dans votre terminal :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/hericlibong/Python-OC-Lettings-fr.git
+<span class="nb">cd</span><span class="w"> </span>Python-OC-Lettings-fr
+</pre></div>
+</div>
+</section>
+<section id="installation-des-dependances">
+<h2>Installation des dépendances<a class="headerlink" href="#installation-des-dependances" title="Lien vers cette rubrique"></a></h2>
+<p>Créez un environnement virtuel et activez-le :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate<span class="w">    </span><span class="c1"># Sur Linux/Mac</span>
+venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate<span class="w">       </span><span class="c1"># Sur Windows</span>
+</pre></div>
+</div>
+<p>Installez les dépendances nécessaires :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="configuration-des-variables-d-environnement">
+<h2>Configuration des variables d’environnement<a class="headerlink" href="#configuration-des-variables-d-environnement" title="Lien vers cette rubrique"></a></h2>
+<p>Créez un fichier <cite>.env</cite> dans le répertoire racine et configurez les variables nécessaires. Voici un exemple :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DEBUG</span><span class="o">=</span>True
+<span class="nv">SECRET_KEY</span><span class="o">=</span>remplacez_par_une_clé_sécurisée_de_settings.py
+<span class="nv">ALLOWED_HOSTS</span><span class="o">=</span><span class="m">127</span>.0.0.1,localhost
+<span class="nv">SENTRY_DSN</span><span class="o">=</span>remplacez_par_votre_valeur_Sentry
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>La variable <cite>DEBUG</cite> est configurée dans le fichier <cite>settings.py</cite> pour s’adapter automatiquement à l’environnement (développement ou production).
+Plus d’informations seront données dans la section « Configuration Globale ».</p>
+</div>
+</section>
+<section id="base-de-donnees">
+<h2>Base de données<a class="headerlink" href="#base-de-donnees" title="Lien vers cette rubrique"></a></h2>
+<p>L’application utilise une base de données SQLite incluse dans le dépôt (<cite>oc-lettings-site.sqlite3</cite>).
+Recommandations :</p>
+<ul class="simple">
+<li><p>Cette base de données est déjà configurée avec les tables et les données nécessaires.</p></li>
+<li><p>Aucune migration n’est requise pour démarrer.</p></li>
+<li><p>Si besoin, vous pouvez consulter la base avec un outil compatible SQLite (ex. DB Browser for SQLite).</p></li>
+</ul>
+</section>
+<section id="lancement-du-serveur">
+<h2>Lancement du serveur<a class="headerlink" href="#lancement-du-serveur" title="Lien vers cette rubrique"></a></h2>
+<p>Démarrez le serveur local :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>manage.py<span class="w"> </span>runserver
+</pre></div>
+</div>
+<p>Accédez ensuite à l’application via [<a class="reference external" href="http://localhost:8000](http://localhost:8000">http://localhost:8000](http://localhost:8000</a>).</p>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
-        <a href="introduction.html" class="btn btn-neutral float-left" title="introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
         <a href="architecture.html" class="btn btn-neutral float-right" title="architecture" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
