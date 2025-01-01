@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ci_cd &mdash; Documentation Python OC Lettings 0.0.0.1</title>
+  <title>Pipeline CI/CD avec Github Actions et Render &mdash; Documentation Python OC Lettings 0.0.0.1</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -45,13 +45,17 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Globale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration principale</a></li>
 <li class="toctree-l1"><a class="reference internal" href="application/index.html">Applications</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ci_cd</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pipeline CI/CD avec Github Actions et Render</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#structure-generale">Structure générale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#details-des-sections">Détails des sections</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">docker</a></li>
 </ul>
 
@@ -69,7 +73,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">ci_cd</li>
+      <li class="breadcrumb-item active">Pipeline CI/CD avec Github Actions et Render</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/ci_cd.rst.txt" rel="nofollow"> Afficher la source de la page</a>
       </li>
@@ -79,9 +83,189 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="ci-cd">
-<h1>ci_cd<a class="headerlink" href="#ci-cd" title="Lien vers cette rubrique"></a></h1>
-<p>Ce document décrit la mise en place de la CI/CD.</p>
+  <section id="pipeline-ci-cd-avec-github-actions-et-render">
+<h1>Pipeline CI/CD avec Github Actions et Render<a class="headerlink" href="#pipeline-ci-cd-avec-github-actions-et-render" title="Lien vers cette rubrique"></a></h1>
+<p>Ce fichier YAML configure un pipeline CI/CD pour le projet déployé sur Render, en utilisant Github Actions. Il automatise les étapes de test, de création d’image Docker et de déploiement.</p>
+<section id="structure-generale">
+<h2>Structure générale<a class="headerlink" href="#structure-generale" title="Lien vers cette rubrique"></a></h2>
+<p>Voici un aperçu des principales sections du fichier :</p>
+<ol class="arabic simple">
+<li><p>Déclencheurs</p></li>
+<li><p>Jobs :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">build</span></code> : Exécute les tests et vérifie le style de code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">containerize</span></code> : Construit et pousse une image Docker.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deploy</span></code> : Déploie l’application sur Render.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="details-des-sections">
+<h2>Détails des sections<a class="headerlink" href="#details-des-sections" title="Lien vers cette rubrique"></a></h2>
+<p><strong>Déclencheurs</strong>
+Cette section détermine quand le pipeline doit être exécuté.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">feature/*</span><span class="w">  </span><span class="c1"># Toutes les branches dont le nom commence par &quot;feature&quot;</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span><span class="w">  </span><span class="c1"># Sur chaque pull request vers master</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Le pipeline s’exécute lors de :</p>
+<ul>
+<li><p><strong>Push</strong> : Sur les branches <cite>master</cite> et celles correspondant au motif <cite>feature/*</cite>.</p></li>
+<li><p><strong>Pull request</strong> : Lorsqu’une PR cible la branche <cite>master</cite>.</p></li>
+</ul>
+</li>
+</ul>
+<p>—</p>
+<p><strong>Job : build</strong>
+Le job <code class="docutils literal notranslate"><span class="pre">build</span></code> exécute les tests, le linting, et garantit que le code est propre et fonctionnel.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout repository</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Set up Python</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/setup-python@v2</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.12&#39;</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">python -m pip install --upgrade pip</span>
+<span class="w">          </span><span class="no">pip install -r requirements.txt</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Flake8</span>
+<span class="w">        </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.ref == &#39;refs/heads/master&#39; || github.ref == &#39;refs/heads/feature/*&#39;</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">pip install flake8</span>
+<span class="w">          </span><span class="no">flake8 .</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run tests with pytest</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">SECRET_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.DJANGO_SECRET_KEY }}</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">pip install pytest pytest-cov</span>
+<span class="w">          </span><span class="no">pytest --cov=. --cov-report=term-missing</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Environnement</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">runs-on:</span> <span class="pre">ubuntu-latest</span></code> : Exécute le job sur une VM Ubuntu.</p></li>
+</ul>
+</li>
+<li><p><strong>Étapes</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">actions/checkout</span></code> : Clone le code du dépôt.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup-python</span></code> : Configure Python 3.12.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Install</span> <span class="pre">dependencies</span></code> : Installe les dépendances listées dans <cite>requirements.txt</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">Flake8</span></code> : Vérifie le style de code (PEP8).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">tests</span> <span class="pre">with</span> <span class="pre">pytest</span></code> :
+- Exécute les tests avec <cite>pytest</cite>.
+- Génère un rapport de couverture de code.</p></li>
+</ul>
+</li>
+<li><p><strong>Conditions</strong> :</p>
+<ul class="simple">
+<li><p>Le linting et les tests ne s’exécutent que sur les branches <cite>master</cite> et <cite>feature/*</cite>.</p></li>
+</ul>
+</li>
+</ol>
+<p>—</p>
+<p><strong>Job : containerize</strong></p>
+<p>Le job <code class="docutils literal notranslate"><span class="pre">containerize</span></code> construit une image Docker et la pousse sur Docker Hub.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">containerize</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.ref == &#39;refs/heads/master&#39;</span>
+<span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout repository</span>
+<span class="w">      </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Log in to Docker Hub</span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">DOCKER_USERNAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.DOCKER_USERNAME }}</span>
+<span class="w">        </span><span class="nt">DOCKER_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.DOCKER_PASSWORD }}</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and tag Docker image</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">docker build -t ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} .</span>
+<span class="w">        </span><span class="no">docker tag ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my_app:latest</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Push Docker image to Docker Hub</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">docker push ${{ secrets.DOCKER_USERNAME }}/my_app:${{ github.sha }}</span>
+<span class="w">        </span><span class="no">docker push ${{ secrets.DOCKER_USERNAME }}/my_app:latest</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Enchaînement</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">needs:</span> <span class="pre">build</span></code> : Ce job ne s’exécute que si le job <code class="docutils literal notranslate"><span class="pre">build</span></code> réussit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">if:</span> <span class="pre">github.ref</span> <span class="pre">==</span> <span class="pre">'refs/heads/master'</span></code> : S’exécute uniquement sur la branche <cite>master</cite>.</p></li>
+</ul>
+</li>
+<li><p><strong>Étapes</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Log</span> <span class="pre">in</span> <span class="pre">to</span> <span class="pre">Docker</span> <span class="pre">Hub</span></code> : Connecte Docker Hub en utilisant les secrets <code class="docutils literal notranslate"><span class="pre">DOCKER_USERNAME</span></code> et <code class="docutils literal notranslate"><span class="pre">DOCKER_PASSWORD</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">and</span> <span class="pre">tag</span> <span class="pre">Docker</span> <span class="pre">image</span></code> :
+- Construit une image Docker pour le projet avec le SHA du commit comme tag unique.
+- Ajoute également le tag <code class="docutils literal notranslate"><span class="pre">latest</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Push</span> <span class="pre">Docker</span> <span class="pre">image</span> <span class="pre">to</span> <span class="pre">Docker</span> <span class="pre">Hub</span></code> : Pousse l’image sur Docker Hub.</p></li>
+</ul>
+</li>
+</ol>
+<p>—</p>
+<p><strong>Job : deploy</strong></p>
+<p>Le job <code class="docutils literal notranslate"><span class="pre">deploy</span></code> déclenche le déploiement sur Render en utilisant l’API de Render.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Deploy to Render</span>
+<span class="w">  </span><span class="nt">needs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">containerize</span>
+<span class="w">  </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.ref == &#39;refs/heads/master&#39;</span>
+<span class="w">  </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Trigger Render Deploy</span>
+<span class="w">      </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no">curl -X POST &quot;https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys&quot; \</span>
+<span class="w">          </span><span class="no">-H &quot;Authorization: Bearer ${{ secrets.RENDER_API_KEY }}&quot; \</span>
+<span class="w">          </span><span class="no">-H &quot;Content-Type: application/json&quot; \</span>
+<span class="w">          </span><span class="no">-d &#39;{&quot;image&quot;: &quot;docker.io/&#39;&quot;${{ secrets.DOCKER_USERNAME }}&quot;&#39;/my_app:latest&quot;}&#39;</span>
+<span class="w">      </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">RENDER_API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.RENDER_API_KEY }}</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ol class="arabic simple">
+<li><p><strong>Enchaînement</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">needs:</span> <span class="pre">containerize</span></code> : Ce job dépend du succès du job <code class="docutils literal notranslate"><span class="pre">containerize</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Conditions</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">if:</span> <span class="pre">github.ref</span> <span class="pre">==</span> <span class="pre">'refs/heads/master'</span></code> : Ce job ne s’exécute que sur la branche <cite>master</cite>.</p></li>
+</ul>
+</li>
+<li><p><strong>Étape</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Trigger</span> <span class="pre">Render</span> <span class="pre">Deploy</span></code> :
+- Utilise l’API de Render pour déployer une nouvelle version de l’application avec l’image Docker taguée <code class="docutils literal notranslate"><span class="pre">latest</span></code>.</p></li>
+</ul>
+</li>
+</ol>
+</section>
 </section>
 
 

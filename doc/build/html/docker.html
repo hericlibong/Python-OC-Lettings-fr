@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>docker &mdash; Documentation Python OC Lettings 0.0.0.1</title>
+  <title>Dockerfile : Explications &mdash; Documentation Python OC Lettings 0.0.0.1</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
-    <link rel="prev" title="ci_cd" href="ci_cd.html" /> 
+    <link rel="prev" title="Pipeline CI/CD avec Github Actions et Render" href="ci_cd.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,14 +44,18 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Globale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration principale</a></li>
 <li class="toctree-l1"><a class="reference internal" href="application/index.html">Applications</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ci_cd.html">ci_cd</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_cd.html">Pipeline CI/CD avec Github Actions et Render</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dockerfile : Explications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#etapes-detaillees">Étapes détaillées</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creer-une-image-docker-manuellement">Créer une image Docker manuellement</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -68,7 +72,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">docker</li>
+      <li class="breadcrumb-item active">Dockerfile : Explications</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/docker.rst.txt" rel="nofollow"> Afficher la source de la page</a>
       </li>
@@ -78,16 +82,119 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="docker">
-<h1>docker<a class="headerlink" href="#docker" title="Lien vers cette rubrique"></a></h1>
-<p>Ce document décrit comment créer une image Docker pour l’application.</p>
+  <section id="dockerfile-explications">
+<h1>Dockerfile : Explications<a class="headerlink" href="#dockerfile-explications" title="Lien vers cette rubrique"></a></h1>
+<p>Ce fichier Dockerfile configure l’image Docker pour exécuter l’application Django. Il est structuré en plusieurs étapes pour installer les dépendances, préparer l’environnement et lancer l’application.</p>
+<section id="etapes-detaillees">
+<h2>Étapes détaillées<a class="headerlink" href="#etapes-detaillees" title="Lien vers cette rubrique"></a></h2>
+<ol class="arabic">
+<li><p><strong>Utiliser une image de base</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.12-slim</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>L’image de base utilisée est <code class="docutils literal notranslate"><span class="pre">python:3.12-slim</span></code>.</p></li>
+<li><p>Elle contient une version minimale de Python 3.12, réduisant la taille de l’image tout en fournissant un environnement Python complet.</p></li>
+</ul>
+</li>
+<li><p><strong>Définir le répertoire de travail</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Définit le répertoire de travail dans le conteneur.</p></li>
+<li><p>Toutes les commandes suivantes (comme <code class="docutils literal notranslate"><span class="pre">COPY</span></code> ou <code class="docutils literal notranslate"><span class="pre">RUN</span></code>) seront exécutées dans ce répertoire.</p></li>
+</ul>
+</li>
+<li><p><strong>Copier les fichiers dans le conteneur</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>/app
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Copie tout le contenu du répertoire courant de l’hôte dans le répertoire <code class="docutils literal notranslate"><span class="pre">/app</span></code> du conteneur.</p></li>
+<li><p>Cela inclut le code source, le fichier <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>, etc.</p></li>
+</ul>
+</li>
+<li><p><strong>Installer les dépendances</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Met à jour <code class="docutils literal notranslate"><span class="pre">pip</span></code> à la dernière version.</p></li>
+<li><p>Installe les packages nécessaires listés dans <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>.</p></li>
+<li><p>L’option <code class="docutils literal notranslate"><span class="pre">--no-cache-dir</span></code> évite de stocker les fichiers de cache, ce qui réduit la taille de l’image.</p></li>
+</ul>
+</li>
+<li><p><strong>Définir les variables d’environnement</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">ENV</span><span class="w"> </span><span class="nv">SECRET_KEY</span><span class="o">=</span><span class="s2">&quot;a_secure_default_key_for_docker&quot;</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Définit une variable d’environnement pour Django, ici une clé secrète par défaut (non sécurisée).</p></li>
+<li><p>Cette valeur peut être surchargée lors de l’exécution du conteneur avec l’option <code class="docutils literal notranslate"><span class="pre">-e</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Collecter les fichiers statiques</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<span class="w"> </span>--noinput
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Exécute la commande <code class="docutils literal notranslate"><span class="pre">collectstatic</span></code> pour préparer les fichiers statiques nécessaires à la production.</p></li>
+<li><p>L’option <code class="docutils literal notranslate"><span class="pre">--noinput</span></code> évite les invites interactives pendant l’exécution.</p></li>
+</ul>
+</li>
+<li><p><strong>Exposer le port</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">EXPOSE</span><span class="w"> </span><span class="s">8000</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Indique que le conteneur écoutera sur le port <code class="docutils literal notranslate"><span class="pre">8000</span></code>.</p></li>
+<li><p>Ce port doit correspondre au port configuré pour le serveur Django.</p></li>
+</ul>
+</li>
+<li><p><strong>Commande par défaut</strong></p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;manage.py&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;runserver&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;0.0.0.0:8000&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Définit la commande par défaut pour démarrer l’application.</p></li>
+<li><p>Ici, le serveur Django démarre en écoutant toutes les interfaces réseau sur le port 8000.</p></li>
+</ul>
+</li>
+</ol>
+<p>—</p>
+</section>
+<section id="creer-une-image-docker-manuellement">
+<h2>Créer une image Docker manuellement<a class="headerlink" href="#creer-une-image-docker-manuellement" title="Lien vers cette rubrique"></a></h2>
+<p>Pour créer une image Docker à partir de ce fichier Dockerfile, exécutez la commande suivante :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>nom_de_l_image:tag<span class="w"> </span>.
+</pre></div>
+</div>
+<p><strong>Exemple</strong> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>my_app:latest<span class="w"> </span>.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">my_app:latest</span></code> : Définit le nom (<code class="docutils literal notranslate"><span class="pre">my_app</span></code>) et le tag (<code class="docutils literal notranslate"><span class="pre">latest</span></code>) de l’image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.</span></code> : Indique que le Dockerfile se trouve dans le répertoire courant.</p></li>
+</ul>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
-        <a href="ci_cd.html" class="btn btn-neutral float-left" title="ci_cd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="ci_cd.html" class="btn btn-neutral float-left" title="Pipeline CI/CD avec Github Actions et Render" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
     </div>
 
   <hr/>

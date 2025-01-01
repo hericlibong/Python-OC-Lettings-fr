@@ -45,15 +45,35 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html">introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../architecture.html">architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration Globale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration principale</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Applications</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="oc_lettings_site.html">oc_lettings_site</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lettings.html">lettings</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lettings.html#tests-de-l-application-lettings">Tests de l’application lettings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">profiles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#structure-de-l-application">Structure de l’application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modeles">Modèles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vues">Vues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#routes">Routes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#templates">Templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#note-sur-les-migrations">Note sur les migrations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tests-de-l-application-profiles">Tests de l’application profiles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#structure-des-tests">Structure des tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tests-detailles">Tests détaillés</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test-de-la-configuration-de-l-application">1. <strong>Test de la configuration de l’application</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests-des-modeles">2. <strong>Tests des modèles</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests-des-urls">3. <strong>Tests des URLs</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests-des-vues">4. <strong>Tests des vues</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../ci_cd.html">ci_cd</a></li>
@@ -87,7 +107,332 @@
              
   <section id="profiles">
 <h1>profiles<a class="headerlink" href="#profiles" title="Lien vers cette rubrique"></a></h1>
-<p>ce document décrit l’application profiles.</p>
+<p>L’application <code class="docutils literal notranslate"><span class="pre">profiles</span></code> gère les profils utilisateurs. Elle utilise le modèle Django intégré <code class="docutils literal notranslate"><span class="pre">User</span></code> et un modèle personnalisé <code class="docutils literal notranslate"><span class="pre">Profile</span></code> pour stocker des informations supplémentaires comme la ville favorite.</p>
+<section id="structure-de-l-application">
+<h2>Structure de l’application<a class="headerlink" href="#structure-de-l-application" title="Lien vers cette rubrique"></a></h2>
+<p>Voici une vue d’ensemble des fichiers de l’application :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>profiles/
+├── __init__.py
+├── admin.py              # Enregistre le modèle Profile dans l&#39;admin Django
+├── apps.py               # Configuration de l&#39;application
+├── models.py             # Définition du modèle Profile
+├── templates/            # Templates HTML pour les pages index et profile
+│   ├── index.html
+│   ├── profile.html
+├── tests/                # Tests unitaires pour les modèles, vues et URLs
+│   ├── test_apps.py
+│   ├── test_models.py
+│   ├── test_urls.py
+│   ├── test_views.py
+├── urls.py               # Routes spécifiques à l&#39;application profiles
+├── views.py              # Logique des vues
+└── migrations/           # Fichiers de migration générés automatiquement
+</pre></div>
+</div>
+</section>
+<section id="modeles">
+<h2>Modèles<a class="headerlink" href="#modeles" title="Lien vers cette rubrique"></a></h2>
+<p>L’application utilise un modèle personnalisé pour enrichir le modèle <code class="docutils literal notranslate"><span class="pre">User</span></code> de Django.</p>
+<ol class="arabic">
+<li><p><strong>User</strong></p>
+<p>Le modèle <code class="docutils literal notranslate"><span class="pre">User</span></code> est intégré à Django et fournit les fonctionnalités de base pour la gestion des utilisateurs (nom, prénom, email, etc.).</p>
+</li>
+<li><p><strong>Profile</strong></p>
+<p>Ce modèle étend les fonctionnalités du modèle <code class="docutils literal notranslate"><span class="pre">User</span></code> en ajoutant un champ optionnel pour la ville favorite.</p>
+<p><strong>Champs</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">user</span></code> : Relation one-to-one avec le modèle <code class="docutils literal notranslate"><span class="pre">User</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">favorite_city</span></code> : Ville favorite de l’utilisateur (chaine de caractères, max 64).</p></li>
+</ul>
+<p><strong>Exemple de code</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">favorite_city</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="vues">
+<h2>Vues<a class="headerlink" href="#vues" title="Lien vers cette rubrique"></a></h2>
+<p>L’application contient deux vues principales, définies dans <code class="docutils literal notranslate"><span class="pre">views.py</span></code> :</p>
+<ol class="arabic">
+<li><p><strong>index</strong></p>
+<p>Affiche la liste de tous les profils utilisateurs.</p>
+<p><strong>Requête</strong> :</p>
+<ul class="simple">
+<li><p>Type : GET</p></li>
+<li><p>URL : <code class="docutils literal notranslate"><span class="pre">/profiles/</span></code></p></li>
+</ul>
+<p><strong>Description</strong> :</p>
+<p>Cette vue récupère tous les objets <code class="docutils literal notranslate"><span class="pre">Profile</span></code> et les passe au template <code class="docutils literal notranslate"><span class="pre">profiles/index.html</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Profile</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">profiles_list</span> <span class="o">=</span> <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;profiles_list&#39;</span><span class="p">:</span> <span class="n">profiles_list</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;profiles/index.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>profile</strong></p>
+<p>Affiche les détails d’un profil utilisateur spécifique.</p>
+<p><strong>Requête</strong> :</p>
+<ul class="simple">
+<li><p>Type : GET</p></li>
+<li><p>URL : <code class="docutils literal notranslate"><span class="pre">/profiles/&lt;username&gt;/</span></code></p></li>
+</ul>
+<p><strong>Description</strong> :</p>
+<p>Cette vue récupère un objet <code class="docutils literal notranslate"><span class="pre">Profile</span></code> en fonction du nom d’utilisateur et passe ses détails au template <code class="docutils literal notranslate"><span class="pre">profiles/profile.html</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">profile</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="n">profile</span> <span class="o">=</span> <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user__username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;profile&#39;</span><span class="p">:</span> <span class="n">profile</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;profiles/profile.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="routes">
+<h2>Routes<a class="headerlink" href="#routes" title="Lien vers cette rubrique"></a></h2>
+<p>Les routes de l’application sont définies dans <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s1">&#39;profiles&#39;</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&lt;str:username&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;profile&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Namespace</strong> : <code class="docutils literal notranslate"><span class="pre">profiles</span></code>, utilisé pour éviter les conflits avec d’autres applications.</p></li>
+<li><p>Routes principales :</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">path('',</span> <span class="pre">views.index,</span> <span class="pre">name='index')</span></code> : Liste des profils.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path('&lt;str:username&gt;/',</span> <span class="pre">views.profile,</span> <span class="pre">name='profile')</span></code> : Détails d’un profil.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="templates">
+<h2>Templates<a class="headerlink" href="#templates" title="Lien vers cette rubrique"></a></h2>
+<p>L’application utilise deux templates principaux pour afficher les profils.</p>
+<ol class="arabic">
+<li><p><strong>index.html</strong></p>
+<p>Affiche la liste de tous les profils utilisateurs avec des liens vers leurs détails.</p>
+<p><strong>Fonctionnalités principales</strong> :</p>
+<ul class="simple">
+<li><p>Liste tous les objets <code class="docutils literal notranslate"><span class="pre">Profile</span></code> récupérés dans la vue <code class="docutils literal notranslate"><span class="pre">index</span></code>.</p></li>
+<li><p>Affiche un message si aucun profil n’est disponible.</p></li>
+</ul>
+</li>
+<li><p><strong>profile.html</strong></p>
+<p>Affiche les détails d’un profil utilisateur spécifique.</p>
+<p><strong>Fonctionnalités principales</strong> :</p>
+<ul class="simple">
+<li><p>Affiche les détails du profil (nom, prénom, email, ville favorite).</p></li>
+<li><p>Les données sont passées par la vue <code class="docutils literal notranslate"><span class="pre">profile</span></code>.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="note-sur-les-migrations">
+<h2>Note sur les migrations<a class="headerlink" href="#note-sur-les-migrations" title="Lien vers cette rubrique"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Certaines migrations ont été effectuées manuellement pour repositionner correctement les tables
+associées à l’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code> dans la base de données. Ces modifications ont permis
+d’assurer une structure cohérente et fonctionnelle. Depuis cette refactorisation, la structure
+est stable et les tables sont correctement en place.</p>
+</div>
+</section>
+</section>
+<section id="tests-de-l-application-profiles">
+<h1>Tests de l’application profiles<a class="headerlink" href="#tests-de-l-application-profiles" title="Lien vers cette rubrique"></a></h1>
+<p>Les tests de l’application <code class="docutils literal notranslate"><span class="pre">profiles</span></code> vérifient la configuration, les modèles, les URLs et les vues associées aux profils utilisateurs. Ils permettent de garantir le bon fonctionnement de cette partie de l’application.</p>
+<section id="structure-des-tests">
+<h2>Structure des tests<a class="headerlink" href="#structure-des-tests" title="Lien vers cette rubrique"></a></h2>
+<p>Le dossier <code class="docutils literal notranslate"><span class="pre">profiles/tests</span></code> contient les tests organisés comme suit :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>profiles/tests/
+├── __init__.py              # Initialisation du package de tests
+├── test_apps.py             # Tests pour la configuration de l&#39;application
+├── test_models.py           # Tests pour le modèle Profile
+├── test_urls.py             # Tests pour les routes de l&#39;application
+├── test_views.py            # Tests pour les vues principales (index et profile)
+</pre></div>
+</div>
+</section>
+<section id="tests-detailles">
+<h2>Tests détaillés<a class="headerlink" href="#tests-detailles" title="Lien vers cette rubrique"></a></h2>
+<section id="test-de-la-configuration-de-l-application">
+<h3>1. <strong>Test de la configuration de l’application</strong><a class="headerlink" href="#test-de-la-configuration-de-l-application" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_apps.py</span></code> vérifie que l’application <code class="docutils literal notranslate"><span class="pre">profiles</span></code> est correctement configurée dans Django.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
+<span class="kn">from</span> <span class="nn">profiles.apps</span> <span class="kn">import</span> <span class="n">ProfilesConfig</span>
+
+<span class="k">def</span> <span class="nf">test_profiles_app</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test that the ProfilesConfig is correctly registered in Django.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Le nom de l&#39;application est bien &#39;profiles&#39;.</span>
+<span class="sd">        - L&#39;application est enregistrée correctement dans Django.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">ProfilesConfig</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;profiles&#39;</span>
+    <span class="k">assert</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_app_config</span><span class="p">(</span><span class="s1">&#39;profiles&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;profiles&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="tests-des-modeles">
+<h3>2. <strong>Tests des modèles</strong><a class="headerlink" href="#tests-des-modeles" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_models.py</span></code> vérifie le fonctionnement du modèle <code class="docutils literal notranslate"><span class="pre">Profile</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="kn">import</span> <span class="n">Profile</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">ProfileTestCase</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_profile_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the string representation of the Profile model.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La méthode __str__ retourne le nom d&#39;utilisateur associé au profil.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;testuser&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;12345&#39;</span><span class="p">)</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">favorite_city</span><span class="o">=</span><span class="s1">&#39;Paris&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">profile</span><span class="p">),</span> <span class="s1">&#39;testuser&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tests-des-urls">
+<h3>3. <strong>Tests des URLs</strong><a class="headerlink" href="#tests-des-urls" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_urls.py</span></code> vérifie que les routes définies dans <code class="docutils literal notranslate"><span class="pre">profiles/urls.py</span></code> pointent correctement vers les vues correspondantes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">SimpleTestCase</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">resolve</span>
+<span class="kn">from</span> <span class="nn">profiles.views</span> <span class="kn">import</span> <span class="n">profile</span><span class="p">,</span> <span class="n">index</span>
+
+<span class="k">class</span> <span class="nc">ProfilesUrlsTest</span><span class="p">(</span><span class="n">SimpleTestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_index_url_resolves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the URL resolution for the index view.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La route &#39;profiles:index&#39; est associée à la vue &#39;index&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;profiles:index&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_profile_url_resolves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the URL resolution for the profile view.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La route &#39;profiles:profile&#39; est associée à la vue &#39;profile&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;profiles:profile&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;some-username&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tests-des-vues">
+<h3>4. <strong>Tests des vues</strong><a class="headerlink" href="#tests-des-vues" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_views.py</span></code> contient des tests pour valider les vues principales (index et profile).</p>
+<p><strong>Test 1 : Vue index</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="kn">import</span> <span class="n">Profile</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">ProfilesViewsTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;testuser&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;12345&#39;</span><span class="p">)</span>
+        <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">favorite_city</span><span class="o">=</span><span class="s1">&#39;Alençon&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_index_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Teste que la vue index retourne le bon statut et utilise le bon template.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - Le statut HTTP est 200.</span>
+<span class="sd">            - Le template utilisé est &#39;profiles/index.html&#39;.</span>
+<span class="sd">            - Le contenu &#39;testuser&#39; est présent dans la réponse.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;profiles:index&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;profiles/index.html&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;testuser&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Test 2 : Vue profile</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_profile_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Teste que la vue profile retourne le bon statut et utilise le bon template.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Le statut HTTP est 200.</span>
+<span class="sd">        - Le template utilisé est &#39;profiles/profile.html&#39;.</span>
+<span class="sd">        - Les détails du profil (nom d&#39;utilisateur, ville favorite) sont affichés.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;profiles:profile&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">]))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;profiles/profile.html&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;testuser&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;Alençon&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Test 3 : Gestion des erreurs</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;profiles.views&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_index_view_logs_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test that the index view logs an error and raises an exception when an error occurs.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Une exception est levée lors d&#39;une erreur dans Profile.objects.all().</span>
+<span class="sd">        - Le message d&#39;erreur est journalisé dans les logs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;profiles.models.Profile.objects.all&#39;</span><span class="p">,</span> <span class="n">side_effect</span><span class="o">=</span><span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Test exception&quot;</span><span class="p">)):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;ERROR&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;profiles:index&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;Error in profiles index view: Test exception&quot;</span> <span class="ow">in</span> <span class="n">message</span>
+                    <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+            <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">test_profile_view_logs_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test que la vue profile journalise une erreur et lève une exception en cas d&#39;erreur.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Une exception est levée lors d&#39;une erreur dans Profile.objects.get().</span>
+<span class="sd">        - Le message d&#39;erreur est journalisé dans les logs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;profiles.models.Profile.objects.get&quot;</span><span class="p">,</span> <span class="n">side_effect</span><span class="o">=</span><span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Test exception&quot;</span><span class="p">)):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;profiles:profile&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;testuser&quot;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;Error in profiles profile view: Test exception&quot;</span> <span class="ow">in</span> <span class="n">message</span>
+                    <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
 

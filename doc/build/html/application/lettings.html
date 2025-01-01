@@ -45,15 +45,35 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html">introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../architecture.html">architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration Globale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration principale</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Applications</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="oc_lettings_site.html">oc_lettings_site</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">lettings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">lettings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#structure-de-l-application">Structure de l’application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modeles">Modèles</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vues">Vues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#routes">Routes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#templates">Templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#note-sur-les-migrations">Note sur les migrations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tests-de-l-application-lettings">Tests de l’application lettings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#structure-des-tests">Structure des tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tests-detailles">Tests détaillés</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test-de-la-configuration-de-l-application">1. Test de la configuration de l’application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests-des-modeles">2. Tests des modèles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests-des-urls">3. Tests des URLs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests-des-vues">4. Tests des vues</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="profiles.html">profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles.html#tests-de-l-application-profiles">Tests de l’application profiles</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../ci_cd.html">ci_cd</a></li>
@@ -87,7 +107,371 @@
              
   <section id="lettings">
 <h1>lettings<a class="headerlink" href="#lettings" title="Lien vers cette rubrique"></a></h1>
-<p>Ce document documente l’application Lettings</p>
+<p>L’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code> est utilisée pour gérer les propriétés de location. Elle utilise deux modèles principaux : <code class="docutils literal notranslate"><span class="pre">Address</span></code> et <code class="docutils literal notranslate"><span class="pre">Letting</span></code>. Les vues associées permettent de lister les locations disponibles et d’afficher les détails d’une location spécifique.</p>
+<section id="structure-de-l-application">
+<h2>Structure de l’application<a class="headerlink" href="#structure-de-l-application" title="Lien vers cette rubrique"></a></h2>
+<p>Voici une vue d’ensemble des fichiers de l’application :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>lettings/
+├── __init__.py
+├── admin.py              # Enregistre les modèles dans l&#39;admin Django
+├── apps.py               # Configuration de l&#39;application
+├── models.py             # Définition des modèles Address et Letting
+├── templates/            # Templates HTML pour les pages index et letting
+│   ├── index.html
+│   ├── letting.html
+├── tests/                # Tests unitaires pour les vues et modèles
+│   ├── test_models.py
+│   ├── test_views.py
+├── urls.py               # Routes spécifiques à l&#39;application lettings
+├── views.py              # Logique des vues
+└── migrations/           # Fichiers de migration générés automatiquement
+</pre></div>
+</div>
+</section>
+<section id="modeles">
+<h2>Modèles<a class="headerlink" href="#modeles" title="Lien vers cette rubrique"></a></h2>
+<p>L’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code> utilise deux modèles : <code class="docutils literal notranslate"><span class="pre">Address</span></code> et <code class="docutils literal notranslate"><span class="pre">Letting</span></code>.</p>
+<ol class="arabic">
+<li><p><strong>Address</strong></p>
+<p>Ce modèle représente une adresse postale.</p>
+<p><strong>Champs</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">number</span></code> : Numéro de rue (entier positif, max 9999).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">street</span></code> : Nom de la rue (chaine de caractères, max 64).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">city</span></code> : Ville (chaine de caractères, max 64).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">state</span></code> : Code d’état (chaine de 2 caractères, ex. « CA »).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zip_code</span></code> : Code postal (entier positif, max 99999).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">country_iso_code</span></code> : Code ISO du pays (chaine de 3 caractères, ex. « USA »).</p></li>
+</ul>
+<p><strong>Relation</strong> : Ce modèle est utilisé dans une relation one-to-one avec le modèle <code class="docutils literal notranslate"><span class="pre">Letting</span></code>.</p>
+<p><strong>Exemple de code</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.core.validators</span> <span class="kn">import</span> <span class="n">MaxValueValidator</span><span class="p">,</span> <span class="n">MinLengthValidator</span>
+
+<span class="k">class</span> <span class="nc">Address</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveIntegerField</span><span class="p">(</span><span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">MaxValueValidator</span><span class="p">(</span><span class="mi">9999</span><span class="p">)])</span>
+    <span class="n">street</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+    <span class="n">city</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
+    <span class="n">zip_code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveIntegerField</span><span class="p">(</span><span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">MaxValueValidator</span><span class="p">(</span><span class="mi">99999</span><span class="p">)])</span>
+    <span class="n">country_iso_code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">3</span><span class="p">)])</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">street</span><span class="si">}</span><span class="s1">&#39;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Letting</strong></p>
+<p>Ce modèle représente une propriété de location.</p>
+<p><strong>Champs</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">title</span></code> : Nom ou titre de la propriété.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">address</span></code> : Relation one-to-one avec un objet <code class="docutils literal notranslate"><span class="pre">Address</span></code>.</p></li>
+</ul>
+<p><strong>Exemple de code</strong> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Letting</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+    <span class="n">address</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">Address</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="vues">
+<h2>Vues<a class="headerlink" href="#vues" title="Lien vers cette rubrique"></a></h2>
+<p>L’application contient deux vues principales, définies dans <code class="docutils literal notranslate"><span class="pre">views.py</span></code> :</p>
+<ol class="arabic">
+<li><p><strong>index</strong></p>
+<p>Affiche la liste de toutes les propriétés disponibles.</p>
+<p><strong>Requête</strong> :</p>
+<ul class="simple">
+<li><p>Type : GET</p></li>
+<li><p>URL : <code class="docutils literal notranslate"><span class="pre">/lettings/</span></code></p></li>
+</ul>
+<p><strong>Description</strong> :</p>
+<p>Cette vue récupère tous les objets <code class="docutils literal notranslate"><span class="pre">Letting</span></code> et les passe au template <code class="docutils literal notranslate"><span class="pre">lettings/index.html</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Letting</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">lettings_list</span> <span class="o">=</span> <span class="n">Letting</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;lettings_list&#39;</span><span class="p">:</span> <span class="n">lettings_list</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;lettings/index.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>letting</strong></p>
+<p>Affiche les détails d’une propriété spécifique.</p>
+<p><strong>Requête</strong> :</p>
+<ul class="simple">
+<li><p>Type : GET</p></li>
+<li><p>URL : <code class="docutils literal notranslate"><span class="pre">/lettings/&lt;letting_id&gt;/</span></code></p></li>
+</ul>
+<p><strong>Description</strong> :</p>
+<p>Cette vue récupère un objet <code class="docutils literal notranslate"><span class="pre">Letting</span></code> par son ID et passe les détails au template <code class="docutils literal notranslate"><span class="pre">lettings/letting.html</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Letting</span>
+
+<span class="k">def</span> <span class="nf">letting</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">letting_id</span><span class="p">):</span>
+    <span class="n">letting</span> <span class="o">=</span> <span class="n">Letting</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">letting_id</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">letting</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+        <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="n">letting</span><span class="o">.</span><span class="n">address</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;lettings/letting.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="routes">
+<h2>Routes<a class="headerlink" href="#routes" title="Lien vers cette rubrique"></a></h2>
+<p>Les routes de l’application sont définies dans <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s1">&#39;lettings&#39;</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&lt;int:letting_id&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">letting</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;letting&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Namespace</strong> : <code class="docutils literal notranslate"><span class="pre">lettings</span></code>, utilisé pour éviter les conflits avec d’autres applications.</p></li>
+<li><p>Routes principales :</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">path('',</span> <span class="pre">views.index,</span> <span class="pre">name='index')</span></code> : Liste des propriétés.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path('&lt;int:letting_id&gt;/',</span> <span class="pre">views.letting,</span> <span class="pre">name='letting')</span></code> : Détails d’une propriété.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="templates">
+<h2>Templates<a class="headerlink" href="#templates" title="Lien vers cette rubrique"></a></h2>
+<ol class="arabic">
+<li><p><strong>index.html</strong></p>
+<p>Affiche la liste des propriétés.</p>
+<p><strong>Exemple de contenu</strong> :</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>{% for letting in lettings_list %}
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;lettings:letting&#39; letting_id=letting.id %}&quot;</span><span class="p">&gt;</span>{{ letting.title }}<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+{% endfor %}
+</pre></div>
+</div>
+</li>
+<li><p><strong>letting.html</strong></p>
+<p>Affiche les détails d’une propriété.</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ address.number }} {{ address.street }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ address.city }}, {{ address.state }} {{ address.zip_code }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ address.country_iso_code }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="note-sur-les-migrations">
+<h2>Note sur les migrations<a class="headerlink" href="#note-sur-les-migrations" title="Lien vers cette rubrique"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Certaines migrations ont été effectuées manuellement pour repositionner correctement les tables
+associées à l’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code> dans la base de données. Ces modifications ont permis
+d’assurer une structure cohérente et fonctionnelle. Depuis cette refactorisation, la structure
+est stable et les tables sont correctement en place.</p>
+</div>
+</section>
+</section>
+<section id="tests-de-l-application-lettings">
+<h1>Tests de l’application lettings<a class="headerlink" href="#tests-de-l-application-lettings" title="Lien vers cette rubrique"></a></h1>
+<p>Les tests de l’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code> vérifient la configuration, les modèles, les URLs et les vues associées à la gestion des propriétés de location. Ces tests sont essentiels pour garantir la stabilité et le bon fonctionnement de cette partie de l’application.</p>
+<section id="structure-des-tests">
+<h2>Structure des tests<a class="headerlink" href="#structure-des-tests" title="Lien vers cette rubrique"></a></h2>
+<p>Le dossier <code class="docutils literal notranslate"><span class="pre">lettings/tests</span></code> contient les tests organisés comme suit :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>lettings/tests/
+├── __init__.py              # Initialisation du package de tests
+├── test_apps.py             # Tests pour la configuration de l&#39;application
+├── test_models.py           # Tests pour les modèles Address et Letting
+├── test_urls.py             # Tests pour les routes de l&#39;application
+├── test_views.py            # Tests pour les vues principales (index et letting)
+</pre></div>
+</div>
+</section>
+<section id="tests-detailles">
+<h2>Tests détaillés<a class="headerlink" href="#tests-detailles" title="Lien vers cette rubrique"></a></h2>
+<section id="test-de-la-configuration-de-l-application">
+<h3>1. Test de la configuration de l’application<a class="headerlink" href="#test-de-la-configuration-de-l-application" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_apps.py</span></code> vérifie que l’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code> est correctement configurée dans Django.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
+<span class="kn">from</span> <span class="nn">lettings.apps</span> <span class="kn">import</span> <span class="n">LettingsConfig</span>
+
+<span class="k">def</span> <span class="nf">test_lettings_app</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test that the LettingsConfig is correctly registered in Django.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Le nom de l&#39;application est bien &#39;lettings&#39;.</span>
+<span class="sd">        - L&#39;application est enregistrée correctement dans Django.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">LettingsConfig</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;lettings&#39;</span>
+    <span class="k">assert</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_app_config</span><span class="p">(</span><span class="s1">&#39;lettings&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;lettings&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="tests-des-modeles">
+<h3>2. Tests des modèles<a class="headerlink" href="#tests-des-modeles" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_models.py</span></code> vérifie le fonctionnement des modèles <code class="docutils literal notranslate"><span class="pre">Address</span></code> et <code class="docutils literal notranslate"><span class="pre">Letting</span></code>.</p>
+<p><strong>Test 1 : Représentation sous forme de chaîne</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">lettings.models</span> <span class="kn">import</span> <span class="n">Letting</span><span class="p">,</span> <span class="n">Address</span>
+
+<span class="k">class</span> <span class="nc">LettingsModelTests</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_address_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the string representation of the Address model.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La méthode __str__ d&#39;Address retourne &#39;123 Main St&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">Address</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">number</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+            <span class="n">street</span><span class="o">=</span><span class="s1">&#39;Main St&#39;</span><span class="p">,</span>
+            <span class="n">city</span><span class="o">=</span><span class="s1">&#39;Springfield&#39;</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">=</span><span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+            <span class="n">zip_code</span><span class="o">=</span><span class="mi">62701</span><span class="p">,</span>
+            <span class="n">country_iso_code</span><span class="o">=</span><span class="s1">&#39;USA&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">address</span><span class="p">),</span> <span class="s1">&#39;123 Main St&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_letting_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the string representation of a Letting instance.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La méthode __str__ de Letting retourne &#39;Test Letting&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">Address</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">number</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+            <span class="n">street</span><span class="o">=</span><span class="s1">&#39;Main St&#39;</span><span class="p">,</span>
+            <span class="n">city</span><span class="o">=</span><span class="s1">&#39;Springfield&#39;</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">=</span><span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+            <span class="n">zip_code</span><span class="o">=</span><span class="mi">62701</span><span class="p">,</span>
+            <span class="n">country_iso_code</span><span class="o">=</span><span class="s1">&#39;USA&#39;</span>
+        <span class="p">)</span>
+        <span class="n">letting</span> <span class="o">=</span> <span class="n">Letting</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Test Letting&#39;</span><span class="p">,</span>
+            <span class="n">address</span><span class="o">=</span><span class="n">address</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">letting</span><span class="p">),</span> <span class="s1">&#39;Test Letting&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tests-des-urls">
+<h3>3. Tests des URLs<a class="headerlink" href="#tests-des-urls" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_urls.py</span></code> vérifie que les routes définies dans <code class="docutils literal notranslate"><span class="pre">lettings/urls.py</span></code> pointent correctement vers les vues correspondantes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">resolve</span>
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">SimpleTestCase</span>
+<span class="kn">from</span> <span class="nn">lettings.views</span> <span class="kn">import</span> <span class="n">index</span><span class="p">,</span> <span class="n">letting</span>
+
+<span class="k">class</span> <span class="nc">TestUrls</span><span class="p">(</span><span class="n">SimpleTestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_index_url_resolves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the URL resolution for the index view.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La route &#39;lettings:index&#39; est associée à la vue &#39;index&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;lettings:index&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_letting_url_resolves</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test the URL resolution for the letting view.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La route &#39;lettings:letting&#39; est associée à la vue &#39;letting&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;lettings:letting&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">letting</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tests-des-vues">
+<h3>4. Tests des vues<a class="headerlink" href="#tests-des-vues" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_views.py</span></code> contient des tests pour valider les vues principales (index et letting).</p>
+<p><strong>Test 1 : Vue index</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">lettings.models</span> <span class="kn">import</span> <span class="n">Letting</span><span class="p">,</span> <span class="n">Address</span>
+
+<span class="k">class</span> <span class="nc">LettingViewsTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">address</span> <span class="o">=</span> <span class="n">Address</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">number</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+            <span class="n">street</span><span class="o">=</span><span class="s1">&#39;Main St&#39;</span><span class="p">,</span>
+            <span class="n">city</span><span class="o">=</span><span class="s1">&#39;Springfield&#39;</span><span class="p">,</span>
+            <span class="n">state</span><span class="o">=</span><span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+            <span class="n">zip_code</span><span class="o">=</span><span class="mi">62701</span><span class="p">,</span>
+            <span class="n">country_iso_code</span><span class="o">=</span><span class="s1">&#39;USA&#39;</span>
+        <span class="p">)</span>
+        <span class="n">Letting</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Test Letting&#39;</span><span class="p">,</span>
+            <span class="n">address</span><span class="o">=</span><span class="n">address</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_index_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Teste que la vue index retourne le bon statut et utilise le bon template.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - Le statut HTTP est 200.</span>
+<span class="sd">            - Le template utilisé est &#39;lettings/index.html&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;lettings:index&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;lettings/index.html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Test 2 : Vue letting</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_letting_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Teste que la vue letting retourne le bon statut et utilise le bon template.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Le statut HTTP est 200.</span>
+<span class="sd">        - Le template utilisé est &#39;lettings/letting.html&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">letting</span> <span class="o">=</span> <span class="n">Letting</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;lettings:letting&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">letting</span><span class="o">.</span><span class="n">id</span><span class="p">]))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;lettings/letting.html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Test 3 : Gestion des erreurs</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_index_view_logs_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test that an exception in the index view is logged and raised.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Une exception est levée lors d&#39;une erreur dans Letting.objects.all().</span>
+<span class="sd">        - Le message d&#39;erreur est journalisé dans les logs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
+
+    <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;lettings.models.Letting.objects.all&#39;</span><span class="p">,</span> <span class="n">side_effect</span><span class="o">=</span><span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Test exception&quot;</span><span class="p">)):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s1">&#39;lettings.views&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;ERROR&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;lettings:index&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;Error in lettings index view: Test exception&quot;</span> <span class="ow">in</span> <span class="n">message</span>
+                    <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
 </section>
 
 
