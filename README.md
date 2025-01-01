@@ -1,77 +1,126 @@
-## Résumé
+# Orange County Lettings App
 
-Site web d'Orange County Lettings
+## Présentation
 
-## Développement local
+Orange County Lettings App est une application web développée en Django pour la gestion des profils utilisateurs et des annonces de locations immobilières. Ce projet a été conçu pour fournir une plateforme intuitive où les utilisateurs peuvent :
+
+- Créer, consulter et modifier leurs profils.
+- Ajouter et gérer des annonces de biens immobiliers.
+
+Le projet inclut une architecture modulaire avec trois applications principales : `oc_lettings_site`, `lettings`, et `profiles`. Chaque composant est conçu pour être autonome et extensible.
+
+---
+
+## Fonctionnalités
+
+### Gestion des Profils Utilisateurs
+- Création, modification et affichage des profils utilisateurs.
+- Chaque profil est associé à un utilisateur Django standard.
+- Stockage des informations telles que la ville préférée de l'utilisateur.
+
+### Gestion des Biens Immobiliers
+- Ajout et modification des annonces de biens immobiliers.
+- Affichage détaillé des informations d'un bien, telles que l'adresse, le titre, etc.
+
+### Page d'Accueil
+- Une page d'accueil centralisant les accès aux différentes sections de l'application.
+
+---
+
+## Instructions pour l'installation
 
 ### Prérequis
+- Python 3.12
+- Git
+- Docker (optionnel pour le déploiement)
 
-- Compte GitHub avec accès en lecture à ce repository
-- Git CLI
-- SQLite3 CLI
-- Interpréteur Python, version 3.6 ou supérieure
+### Étapes d'installation
 
-Dans le reste de la documentation sur le développement local, il est supposé que la commande `python` de votre OS shell exécute l'interpréteur Python ci-dessus (à moins qu'un environnement virtuel ne soit activé).
+1. Clonez le dépôt :
+    ```bash
+    git clone https://github.com/hericlibong/Python-OC-Lettings-fr.git
+    cd Python-OC-Lettings-FR
+    ```
 
-### macOS / Linux
+2. Installez les dépendances :
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # Sur Windows : venv\Scripts\activate
+    pip install -r requirements.txt
+    ```
 
-#### Cloner le repository
+3. Configurez les variables d'environnement en créant un fichier `.env` à la racine :
+    ```bash
+    SECRET_KEY="votre_clé_secrète"
+    DEBUG=True
+    ALLOWED_HOSTS=localhost,127.0.0.1
+    SENTRY_DSN="votre_dsn_sentry"
+    ```
 
-- `cd /path/to/put/project/in`
-- `git clone https://github.com/hericlibong/Python-OC-Lettings-fr.git`
+4. Lancez les migrations :
+    ```bash
+    python manage.py migrate
+    ```
 
-#### Créer l'environnement virtuel
+5. Collectez les fichiers statiques :
+    ```bash
+    python manage.py collectstatic --noinput
+    ```
 
-- `cd /path/to/Python-OC-Lettings-fr`
-- `python -m venv venv`
-- `apt-get install python3-venv` (Si l'étape précédente comporte des erreurs avec un paquet non trouvé sur Ubuntu)
-- Activer l'environnement `source venv/bin/activate`
-- Confirmer que la commande `python` exécute l'interpréteur Python dans l'environnement virtuel
-`which python`
-- Confirmer que la version de l'interpréteur Python est la version 3.6 ou supérieure `python --version`
-- Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
-- Pour désactiver l'environnement, `deactivate`
+6. Démarrez le serveur de développement :
+    ```bash
+    python manage.py runserver
+    ```
 
-#### Exécuter le site
+---
 
-- `cd /path/to/Python-OC-Lettings-fr`
-- `source venv/bin/activate`
-- `pip install --requirement requirements.txt`
-- `python manage.py runserver`
-- Aller sur `http://localhost:8000` dans un navigateur.
-- Confirmer que le site fonctionne et qu'il est possible de naviguer (vous devriez voir plusieurs profils et locations).
+## Instructions pour l'usage
 
-#### Linting
+### Accès à l'application
+- Page d'accueil : [http://localhost:8000/](http://localhost:8000/)
+- Panel d'administration : [http://localhost:8000/admin](http://localhost:8000/admin)
 
-- `cd /path/to/Python-OC-Lettings-fr`
-- `source venv/bin/activate`
-- `flake8`
+### Déploiement avec Docker
+Pour créer une image Docker localement :
+```bash
+```
 
-#### Tests unitaires
+```markdown
+docker build -t orange-county-lettings .
 
-- `cd /path/to/Python-OC-Lettings-fr`
-- `source venv/bin/activate`
-- `pytest`
+Pour exécuter le conteneur Docker :
 
-#### Base de données
+docker run -p 8000:8000 orange-county-lettings
 
-- `cd /path/to/Python-OC-Lettings-fr`
-- Ouvrir une session shell `sqlite3`
-- Se connecter à la base de données `.open oc-lettings-site.sqlite3`
-- Afficher les tables dans la base de données `.tables`
-- Afficher les colonnes dans le tableau des profils, `pragma table_info(Python-OC-Lettings-FR_profile);`
-- Lancer une requête sur la table des profils, `select user_id, favorite_city from
-  Python-OC-Lettings-FR_profile where favorite_city like 'B%';`
-- `.quit` pour quitter
+## Informations complémentaires
 
-#### Panel d'administration
+### Architecture
 
-- Aller sur `http://localhost:8000/admin`
-- Connectez-vous avec l'utilisateur `admin`, mot de passe `Abc1234!`
+Le projet est divisé en trois applications Django principales :
 
-### Windows
+- `oc_lettings_site` : Gère la page d'accueil du projet.
+- `lettings` : Gère les annonces de locations immobilières.
+- `profiles` : Gère les profils utilisateurs.
 
-Utilisation de PowerShell, comme ci-dessus sauf :
+### Documentation
 
-- Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
-- Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+La documentation complète est disponible sur [Read the Docs](https://orange-county-lettings-app.readthedocs.io/fr/latest/index.html).
+
+### CI/CD
+
+- Les pipelines CI/CD sont configurés avec GitHub Actions.
+- Déploiement automatisé via Render avec des conteneurs Docker.
+
+### Tests
+
+- Couverture complète des tests pour les modèles, vues et URLs.
+- Exécution des tests avec pytest :
+
+  ```bash
+  pytest --cov=. --cov-report=term-missing
+  ```
+
+### Auteur
+
+Créé par Heric Libong dans le cadre du projet P13 d'OpenClassrooms.
+```
