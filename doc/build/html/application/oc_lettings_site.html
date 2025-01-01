@@ -45,13 +45,25 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html">introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../architecture.html">architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration Globale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">Configuration principale</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Applications</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">oc_lettings_site</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">oc_lettings_site</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#structure-de-l-application">Structure de l’application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vue-principale">Vue principale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#routes">Routes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#template">Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tests-unitaires">Tests unitaires</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test-de-l-application">1. Test de l’application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test-de-la-vue">2. Test de la vue</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#migrations">Migrations</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="lettings.html">lettings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="profiles.html">profiles</a></li>
 </ul>
@@ -87,7 +99,186 @@
              
   <section id="oc-lettings-site">
 <h1>oc_lettings_site<a class="headerlink" href="#oc-lettings-site" title="Lien vers cette rubrique"></a></h1>
-<p>Ce document documente l’application oc_lettings_site</p>
+<p>L’application <code class="docutils literal notranslate"><span class="pre">oc_lettings_site</span></code> est utilisée pour gérer la page d’accueil du projet. Elle n’utilise pas de modèles, mais se concentre sur la gestion de la vue principale et des tests associés.</p>
+<section id="structure-de-l-application">
+<h2>Structure de l’application<a class="headerlink" href="#structure-de-l-application" title="Lien vers cette rubrique"></a></h2>
+<p>Voici une vue d’ensemble des fichiers de l’application :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>oc_lettings_site/
+├── __init__.py
+├── admin.py                  # Vide
+├── apps.py                   # Configuration de l&#39;application
+├── models.py                 # Vide
+├── tests/                    # Contient les tests unitaires
+│   ├── test_apps.py
+│   ├── test_views.py
+├── templates/                # Contient les templates HTML
+│   ├── oc_lettings_site/index.html
+├── urls.py                   # Définition des routes de l&#39;application
+├── views.py                  # Logique des vues
+└── migrations/               # Dossier de migrations (aucune migration en attente)
+</pre></div>
+</div>
+</section>
+<section id="vue-principale">
+<h2>Vue principale<a class="headerlink" href="#vue-principale" title="Lien vers cette rubrique"></a></h2>
+<p>La vue principale, définie dans <code class="docutils literal notranslate"><span class="pre">views.py</span></code>, sert à afficher la page d’accueil. Voici les comportements attendus et leurs assertions.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renders the homepage of the application.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request (HttpRequest): The HTTP request object.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: The rendered &#39;oc_lettings_site/index.html&#39; template.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - La vue retourne un objet HttpResponse.</span>
+<span class="sd">        - Le template utilisé est &#39;oc_lettings_site/index.html&#39;.</span>
+<span class="sd">        - Toute erreur est journalisée dans le logger &#39;oc_lettings_site.views&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;oc_lettings_site/index.html&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error in oc_lettings_site index view: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+</pre></div>
+</div>
+</section>
+<section id="routes">
+<h2>Routes<a class="headerlink" href="#routes" title="Lien vers cette rubrique"></a></h2>
+<p>Les routes de l’application sont définies dans <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s1">&#39;oc_lettings_site&#39;</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Namespace</strong> : <code class="docutils literal notranslate"><span class="pre">oc_lettings_site</span></code>, utilisé pour éviter les conflits avec d’autres applications.</p></li>
+<li><p>Route principale :
+- <code class="docutils literal notranslate"><span class="pre">path('',</span> <span class="pre">views.index,</span> <span class="pre">name='index')</span></code> : Définit la route pour la page d’accueil.</p></li>
+</ul>
+</section>
+<section id="template">
+<h2>Template<a class="headerlink" href="#template" title="Lien vers cette rubrique"></a></h2>
+<p>Le template utilisé pour la page d’accueil est <code class="docutils literal notranslate"><span class="pre">oc_lettings_site/index.html</span></code> :</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span>{% extends &quot;base.html&quot; %}
+{% block title %}Holiday Homes{% endblock title %}
+
+{% block content %}
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container px-5 py-5 text-center&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;row justify-content-center&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;col-lg-8&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;page-header-ui-title mb-3 display-6&quot;</span><span class="p">&gt;</span>Welcome to Holiday Homes<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container px-5 py-5 text-center&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;justify-content-center&quot;</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">a</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn fw-500 ms-lg-4 btn-primary px-10&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;profiles:index&#39; %}&quot;</span><span class="p">&gt;</span>
+            Profiles
+        <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">a</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn fw-500 ms-lg-4 btn-primary px-10&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;{% url &#39;lettings:index&#39; %}&quot;</span><span class="p">&gt;</span>
+            Lettings
+        <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+</section>
+<section id="tests-unitaires">
+<h2>Tests unitaires<a class="headerlink" href="#tests-unitaires" title="Lien vers cette rubrique"></a></h2>
+<p>L’application inclut des tests pour vérifier la configuration de l’application et la vue principale. Voici les comportements attendus, présentés avec des assertions explicites.</p>
+<section id="test-de-l-application">
+<h3>1. Test de l’application<a class="headerlink" href="#test-de-l-application" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_apps.py</span></code> vérifie que la configuration de l’application est correctement enregistrée dans Django.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.apps</span> <span class="kn">import</span> <span class="n">apps</span>
+<span class="kn">from</span> <span class="nn">oc_lettings_site.apps</span> <span class="kn">import</span> <span class="n">OCLettingsSiteConfig</span>
+
+<span class="k">def</span> <span class="nf">test_oc_lettings_site_app</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test that the OCLettingsSiteConfig is correctly registered in Django.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - Le nom de l&#39;application est bien &#39;oc_lettings_site&#39;.</span>
+<span class="sd">        - L&#39;application est enregistrée correctement dans Django.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">OCLettingsSiteConfig</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;oc_lettings_site&#39;</span>
+    <span class="k">assert</span> <span class="n">apps</span><span class="o">.</span><span class="n">get_app_config</span><span class="p">(</span><span class="s1">&#39;oc_lettings_site&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;oc_lettings_site&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="test-de-la-vue">
+<h3>2. Test de la vue<a class="headerlink" href="#test-de-la-vue" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_views.py</span></code> contient des tests pour valider le fonctionnement de la vue principale (index).</p>
+<p><strong>Test 1 : Fonctionnement normal</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+
+<span class="k">class</span> <span class="nc">OcLettingsSiteViewsTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_index_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Teste que la vue &#39;index&#39; retourne un statut 200 et utilise le bon template.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - La réponse HTTP a un statut 200.</span>
+<span class="sd">            - Le template utilisé est &#39;oc_lettings_site/index.html&#39;.</span>
+<span class="sd">            - Le contenu &#39;Welcome to Holiday Homes&#39; est présent dans la réponse.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;oc_lettings_site:index&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;oc_lettings_site/index.html&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s1">&#39;Welcome to Holiday Homes&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Test 2 : Gestion des erreurs</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;oc_lettings_site.views&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">OcLettingsSiteViewsTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_index_view_logs_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Test que la vue index journalise une erreur et lève une exception en cas d&#39;erreur.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - Une exception est levée lors d&#39;une erreur dans la vue.</span>
+<span class="sd">            - Un message d&#39;erreur est journalisé avec le logger &#39;oc_lettings_site.views&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s2">&quot;oc_lettings_site.views.render&quot;</span><span class="p">,</span> <span class="n">side_effect</span><span class="o">=</span><span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Test exception&quot;</span><span class="p">)):</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s2">&quot;oc_lettings_site.views&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;oc_lettings_site:index&quot;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+                    <span class="nb">any</span><span class="p">(</span>
+                        <span class="s2">&quot;Error in oc_lettings_site index view: Test exception&quot;</span> <span class="ow">in</span> <span class="n">message</span>
+                        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">log</span><span class="o">.</span><span class="n">output</span>
+                    <span class="p">),</span>
+                    <span class="sa">f</span><span class="s2">&quot;Logs enregistrés: </span><span class="si">{</span><span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="migrations">
+<h2>Migrations<a class="headerlink" href="#migrations" title="Lien vers cette rubrique"></a></h2>
+<p>Le dossier <code class="docutils literal notranslate"><span class="pre">migrations</span></code> a subi une refactorisation pour stabiliser la structure. Aucune migration supplémentaire n’est attendue, car l’application ne contient pas de modèles.</p>
+</section>
 </section>
 
 

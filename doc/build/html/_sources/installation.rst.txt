@@ -1,4 +1,4 @@
-installation
+Installation
 ============
 
 Ce guide explique comment configurer le projet **Python OC Lettings** en local.

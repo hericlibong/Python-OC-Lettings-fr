@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Configuration Globale &mdash; Documentation Python OC Lettings 0.0.0.1</title>
+  <title>Configuration principale &mdash; Documentation Python OC Lettings 0.0.0.1</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -45,11 +45,34 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration Globale</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration principale</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#settings-py">settings.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-sentry">Configuration Sentry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fonctionnement-des-composants">Fonctionnement des composants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#personnalisation">Personnalisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#variables-d-environnement">Variables d’environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modes-developpement-et-production">Modes Développement et Production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#base-de-donnees">Base de données</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gestion-des-fichiers-statiques">Gestion des fichiers statiques</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#urls-py">urls.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-des-composants">Description des composants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#concept-de-namespaces">Concept de namespaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proposition-d-autres-explications">Proposition d’autres explications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tests-du-repertoire-config">Tests du répertoire config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arborescence-des-fichiers">Arborescence des fichiers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#details-des-tests">Détails des tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test-asgi">1. Test ASGI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-wsgi">2. Test WSGI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-des-urls">3. Test des URLs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="application/index.html">Applications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ci_cd.html">ci_cd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">docker</a></li>
@@ -69,7 +92,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Configuration Globale</li>
+      <li class="breadcrumb-item active">Configuration principale</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/config.rst.txt" rel="nofollow"> Afficher la source de la page</a>
       </li>
@@ -79,9 +102,446 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="configuration-globale">
-<h1>Configuration Globale<a class="headerlink" href="#configuration-globale" title="Lien vers cette rubrique"></a></h1>
-<p>Ce document décrit les fichiers de configuration globaux du projet.</p>
+  <section id="configuration-principale">
+<h1>Configuration principale<a class="headerlink" href="#configuration-principale" title="Lien vers cette rubrique"></a></h1>
+<p>Le répertoire <code class="docutils literal notranslate"><span class="pre">config</span></code> contient les fichiers essentiels à la configuration et au fonctionnement global du projet :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">settings.py</span></code> : Définit les paramètres globaux du projet (bases de données, applications installées, variables d’environnement, etc.).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urls.py</span></code> : Centralise les routes globales du projet et inclut les URLs des applications.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wsgi.py</span></code> : Point d’entrée pour le serveur web en mode WSGI.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">asgi.py</span></code> : Point d’entrée pour le serveur web en mode ASGI (asynchrone).</p></li>
+</ul>
+<p>Ce répertoire n’est pas une application Django mais joue un rôle crucial dans la gestion du projet.</p>
+<section id="settings-py">
+<h2>settings.py<a class="headerlink" href="#settings-py" title="Lien vers cette rubrique"></a></h2>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> configure les paramètres globaux du projet Django, en distinguant les environnements de développement et de production. Voici une présentation détaillée des sections clés.</p>
+</section>
+<section id="configuration-sentry">
+<h2>Configuration Sentry<a class="headerlink" href="#configuration-sentry" title="Lien vers cette rubrique"></a></h2>
+<p>Sentry est utilisé pour la journalisation et le suivi des erreurs dans l’application.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DSN</span> <span class="pre">Sentry</span></code> : Configuré via la variable d’environnement <code class="docutils literal notranslate"><span class="pre">SENTRY_DSN</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Intégration</span> <span class="pre">Django</span></code> : Ajoutée pour capturer les erreurs spécifiques au framework.</p></li>
+</ul>
+<p>Exemple de configuration dans <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sentry_sdk</span>
+<span class="kn">from</span> <span class="nn">sentry_sdk.integrations.django</span> <span class="kn">import</span> <span class="n">DjangoIntegration</span>
+
+<span class="n">sentry_sdk</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+    <span class="n">dsn</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SENTRY_DSN&#39;</span><span class="p">),</span>
+    <span class="n">integrations</span><span class="o">=</span><span class="p">[</span><span class="n">DjangoIntegration</span><span class="p">()],</span>
+    <span class="n">traces_sample_rate</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">send_default_pii</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">_experiments</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;continuous_profiling_auto_start&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>En complément, les erreurs de niveau <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> sont également envoyées à Sentry grâce à un handler spécifique dans le dictionnaire <code class="docutils literal notranslate"><span class="pre">LOGGING</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">LOGGING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;formatters&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{levelname}</span><span class="s1"> </span><span class="si">{asctime}</span><span class="s1"> </span><span class="si">{module}</span><span class="s1"> </span><span class="si">{message}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;simple&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{levelname}</span><span class="s1"> </span><span class="si">{message}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;style&#39;</span><span class="p">:</span> <span class="s1">&#39;{&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;console&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.StreamHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;verbose&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;sentry&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;sentry_sdk.integrations.logging.EventHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;loggers&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;django&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;sentry&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;lettings.views&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">,</span> <span class="s1">&#39;sentry&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="fonctionnement-des-composants">
+<h2>Fonctionnement des composants<a class="headerlink" href="#fonctionnement-des-composants" title="Lien vers cette rubrique"></a></h2>
+<p>Voici une description détaillée des composants de la configuration <code class="docutils literal notranslate"><span class="pre">LOGGING</span></code> :</p>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">formatters</span></code></p>
+<p>Définit le format des messages dans les logs. Par exemple :</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ERROR 2024-12-31 12:34:56 my_module Une erreur s&#39;est produite
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">handlers</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">console</span></code> : Affiche les logs dans le terminal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sentry</span></code> : Envoie les logs de niveau <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> et supérieur à Sentry.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loggers</span></code></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">django</span></code> : Capture les logs spécifiques à Django.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">lettings.views</span></code> : Définit un logger dédié pour la vue <code class="docutils literal notranslate"><span class="pre">lettings</span></code>.</p></li>
+<li><p>Logger global (<code class="docutils literal notranslate"><span class="pre">''</span></code>) : Capture tous les logs non assignés à un logger spécifique.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="personnalisation">
+<h2>Personnalisation<a class="headerlink" href="#personnalisation" title="Lien vers cette rubrique"></a></h2>
+<p>Vous pouvez personnaliser la configuration de logging :</p>
+<ul class="simple">
+<li><p>Ajouter des loggers spécifiques pour d’autres modules de l’application.</p></li>
+<li><p>Modifier le niveau des logs selon l’environnement (ex. : <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> en développement, <code class="docutils literal notranslate"><span class="pre">ERROR</span></code> en production).</p></li>
+<li><p>Adapter les formatters pour inclure davantage de détails, comme les adresses IP ou les identifiants utilisateur.</p></li>
+</ul>
+</section>
+<section id="variables-d-environnement">
+<h2>Variables d’environnement<a class="headerlink" href="#variables-d-environnement" title="Lien vers cette rubrique"></a></h2>
+<p>Les variables d’environnement sont utilisées pour sécuriser des informations sensibles et adapter l’application à différents environnements.</p>
+<p>Exemples de variables définies dans le fichier <code class="docutils literal notranslate"><span class="pre">.env</span></code> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DEBUG</span><span class="o">=</span>True
+<span class="nv">SECRET_KEY</span><span class="o">=</span>ma_clé_sécurisée
+<span class="nv">ALLOWED_HOSTS</span><span class="o">=</span>localhost,127.0.0.1
+<span class="nv">SENTRY_DSN</span><span class="o">=</span>ma_valeur_dsn
+</pre></div>
+</div>
+<p>Elles sont chargées dans <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> avec la bibliothèque <code class="docutils literal notranslate"><span class="pre">python-dotenv</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">load_dotenv</span><span class="p">()</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">)</span>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ALLOWED_HOSTS&#39;</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+<span class="n">SENTRY_DSN</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;SENTRY_DSN&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="modes-developpement-et-production">
+<h2>Modes Développement et Production<a class="headerlink" href="#modes-developpement-et-production" title="Lien vers cette rubrique"></a></h2>
+<p>La variable <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code> contrôle si l’application est en mode développement ou production. Par défaut, elle est configurée via <code class="docutils literal notranslate"><span class="pre">os.getenv</span></code> pour s’adapter à l’environnement :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DEBUG</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span> <span class="s1">&#39;False&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Ne jamais utiliser <code class="docutils literal notranslate"><span class="pre">DEBUG=True</span></code> en production, car cela expose des informations sensibles.</p>
+</div>
+<p>Les hôtes autorisés sont également gérés dynamiquement avec <code class="docutils literal notranslate"><span class="pre">ALLOWED_HOSTS</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ALLOWED_HOSTS&#39;</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="base-de-donnees">
+<h2>Base de données<a class="headerlink" href="#base-de-donnees" title="Lien vers cette rubrique"></a></h2>
+<p>L’application utilise SQLite comme base de données par défaut. La configuration est simplifiée grâce à <code class="docutils literal notranslate"><span class="pre">os.path</span></code> pour générer le chemin dynamiquement :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;ENGINE&#39;</span><span class="p">:</span> <span class="s1">&#39;django.db.backends.sqlite3&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s1">&#39;oc-lettings-site.sqlite3&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Si une autre base de données est nécessaire (par exemple, PostgreSQL), il suffit de modifier la section <code class="docutils literal notranslate"><span class="pre">DATABASES</span></code> et d’ajuster les variables d’environnement.</p>
+</section>
+<section id="gestion-des-fichiers-statiques">
+<h2>Gestion des fichiers statiques<a class="headerlink" href="#gestion-des-fichiers-statiques" title="Lien vers cette rubrique"></a></h2>
+<p>Les fichiers statiques sont servis efficacement en production grâce à WhiteNoise. Voici les points clés de la configuration :</p>
+<ul class="simple">
+<li><p><strong>Répertoire de collecte des fichiers</strong> : Défini par <code class="docutils literal notranslate"><span class="pre">STATIC_ROOT</span></code>.</p></li>
+<li><p><strong>Répertoire des fichiers sources</strong> : Listé dans <code class="docutils literal notranslate"><span class="pre">STATICFILES_DIRS</span></code>.</p></li>
+<li><p><strong>Stockage optimisé</strong> : Utilisation de <code class="docutils literal notranslate"><span class="pre">CompressedManifestStaticFilesStorage</span></code> pour minimiser et optimiser les fichiers.</p></li>
+</ul>
+<p>Extrait de configuration dans <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s1">&#39;/static/&#39;</span>
+<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s1">&#39;staticfiles&#39;</span><span class="p">)</span>
+<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s1">&#39;static&#39;</span><span class="p">)]</span>
+<span class="n">STATICFILES_STORAGE</span> <span class="o">=</span> <span class="s1">&#39;whitenoise.storage.CompressedManifestStaticFilesStorage&#39;</span>
+</pre></div>
+</div>
+<p>Le middleware WhiteNoise est également ajouté pour servir les fichiers statiques :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;django.middleware.security.SecurityMiddleware&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;whitenoise.middleware.WhiteNoiseMiddleware&#39;</span><span class="p">,</span>
+    <span class="c1"># Autres middlewares</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="urls-py">
+<h2>urls.py<a class="headerlink" href="#urls-py" title="Lien vers cette rubrique"></a></h2>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> du répertoire <code class="docutils literal notranslate"><span class="pre">config</span></code> centralise toutes les routes du projet Django. Il utilise le mécanisme d’inclusion pour déléguer la gestion des URLs spécifiques aux applications individuelles.</p>
+<p>Voici le contenu du fichier <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">include</span>
+<span class="kn">from</span> <span class="nn">django.views.defaults</span> <span class="kn">import</span> <span class="n">page_not_found</span><span class="p">,</span> <span class="n">server_error</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;admin/&#39;</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;oc_lettings_site.urls&#39;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">&#39;oc_lettings_site&#39;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;lettings/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;lettings.urls&#39;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">&#39;lettings&#39;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;profiles/&#39;</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="s1">&#39;profiles.urls&#39;</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s1">&#39;profiles&#39;</span><span class="p">)),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;404/&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">request</span><span class="p">:</span> <span class="n">page_not_found</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="kc">None</span><span class="p">)),</span>  <span class="c1"># Test 404 page</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;500/&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">request</span><span class="p">:</span> <span class="n">server_error</span><span class="p">(</span><span class="n">request</span><span class="p">)),</span>  <span class="c1"># Test 500 page</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="description-des-composants">
+<h2>Description des composants<a class="headerlink" href="#description-des-composants" title="Lien vers cette rubrique"></a></h2>
+<ol class="arabic">
+<li><p><strong>Administration Django</strong></p>
+<p>La route <code class="docutils literal notranslate"><span class="pre">admin/</span></code> permet d’accéder à l’interface d’administration fournie par Django.</p>
+<p>Exemple :</p>
+<p><a class="reference external" href="http://localhost:8000/admin">http://localhost:8000/admin</a></p>
+</li>
+<li><p><strong>Inclusions des URLs des applications</strong></p>
+<p>Chaque application du projet gère ses propres URLs. Le fichier <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> principal les inclut en utilisant la fonction <code class="docutils literal notranslate"><span class="pre">include</span></code>.</p>
+<p>Exemple :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">path('',</span> <span class="pre">include('oc_lettings_site.urls',</span> <span class="pre">namespace='oc_lettings_site'))</span></code> :
+Inclut les routes définies dans <code class="docutils literal notranslate"><span class="pre">oc_lettings_site/urls.py</span></code> et les associe au namespace <code class="docutils literal notranslate"><span class="pre">oc_lettings_site</span></code>.</p></li>
+<li><p>Cela permet de déléguer la gestion des URLs spécifiques à chaque application.</p></li>
+</ul>
+</li>
+<li><p><strong>Pages de test pour les erreurs 404 et 500</strong></p>
+<ul class="simple">
+<li><p>Les deux dernières lignes ajoutent des routes de test pour simuler des erreurs :</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">path('404/',</span> <span class="pre">lambda</span> <span class="pre">request:</span> <span class="pre">page_not_found(request,</span> <span class="pre">exception=None))</span></code> : Simule une erreur 404.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path('500/',</span> <span class="pre">lambda</span> <span class="pre">request:</span> <span class="pre">server_error(request))</span></code> : Simule une erreur 500.</p></li>
+</ul>
+</li>
+<li><p>Ces routes sont particulièrement utiles pour vérifier que les pages personnalisées d’erreur sont bien configurées.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="concept-de-namespaces">
+<h2>Concept de namespaces<a class="headerlink" href="#concept-de-namespaces" title="Lien vers cette rubrique"></a></h2>
+<p>Les namespaces sont utilisés pour organiser et différencier les routes des différentes applications. Cela permet d’éviter les conflits de noms lorsqu’une même route (par exemple, <code class="docutils literal notranslate"><span class="pre">index</span></code>) est définie dans plusieurs applications.</p>
+<ol class="arabic simple">
+<li><p><strong>Namespace global</strong> :</p></li>
+</ol>
+<blockquote>
+<div><ul>
+<li><p>Défini dans le fichier <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> principal via l’inclusion.</p></li>
+<li><p>Exemple :</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">namespace='lettings'</span></code> assigne toutes les URLs de l’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code> au namespace <code class="docutils literal notranslate"><span class="pre">lettings</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong>Utilisation dans les templates et vues</strong> :</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Les namespaces permettent d’appeler les URLs de manière explicite.</p></li>
+<li><dl class="simple">
+<dt>Exemple d’utilisation dans un template :</dt><dd><p><code class="docutils literal notranslate"><span class="pre">`html</span>
+<span class="pre">&lt;a</span> <span class="pre">href=&quot;{%</span> <span class="pre">url</span> <span class="pre">'lettings:index'</span> <span class="pre">%}&quot;&gt;Voir</span> <span class="pre">les</span> <span class="pre">locations&lt;/a&gt;</span>
+<span class="pre">`</span></code></p>
+</dd>
+</dl>
+</li>
+<li><p>Ici, <code class="docutils literal notranslate"><span class="pre">lettings:index</span></code> appelle la vue <code class="docutils literal notranslate"><span class="pre">index</span></code> définie dans l’application <code class="docutils literal notranslate"><span class="pre">lettings</span></code>.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="proposition-d-autres-explications">
+<h2>Proposition d’autres explications<a class="headerlink" href="#proposition-d-autres-explications" title="Lien vers cette rubrique"></a></h2>
+<ol class="arabic simple">
+<li><p><strong>Avantages de l’inclusion d’URLs</strong> :</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Simplifie la gestion des routes en isolant les URLs propres à chaque application.</p></li>
+<li><p>Facilite la maintenance et la réutilisation des applications.</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong>Utilisation des fonctions Django pour les erreurs</strong> :</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Les fonctions <code class="docutils literal notranslate"><span class="pre">page_not_found</span></code> et <code class="docutils literal notranslate"><span class="pre">server_error</span></code> appartiennent au module <code class="docutils literal notranslate"><span class="pre">django.views.defaults</span></code>.</p></li>
+<li><p>Elles fournissent des réponses par défaut pour les erreurs HTTP (404 et 500), mais peuvent être remplacées par des templates personnalisés.</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p><strong>Extensions futures possibles</strong> :</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Ajouter des tests unitaires pour vérifier que les routes renvoient les réponses attendues.</p></li>
+<li><p>Configurer des pages d’erreur plus conviviales avec des templates dédiés.</p></li>
+</ul>
+</div></blockquote>
+<p>Exemple de gestion des erreurs dans <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> :</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># settings.py</span>
+<span class="n">HANDLER404</span> <span class="o">=</span> <span class="s1">&#39;config.views.custom_404&#39;</span>
+<span class="n">HANDLER500</span> <span class="o">=</span> <span class="s1">&#39;config.views.custom_500&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="tests-du-repertoire-config">
+<h2>Tests du répertoire config<a class="headerlink" href="#tests-du-repertoire-config" title="Lien vers cette rubrique"></a></h2>
+<p>Le répertoire <code class="docutils literal notranslate"><span class="pre">config/tests</span></code> contient les tests unitaires associés aux fichiers de configuration principaux du projet Django. Ces tests assurent que les composants critiques (ASGI, WSGI, et routes globales) fonctionnent correctement.</p>
+</section>
+<section id="arborescence-des-fichiers">
+<h2>Arborescence des fichiers<a class="headerlink" href="#arborescence-des-fichiers" title="Lien vers cette rubrique"></a></h2>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>config/
+├── __init__.py
+├── asgi.py
+├── settings.py
+├── urls.py
+├── wsgi.py
+├── tests/
+│   ├── __init__.py
+│   ├── test_asgi.py         # Teste la configuration ASGI
+│   ├── test_urls.py         # Teste les routes globales
+│   └── test_wsgi.py         # Teste la configuration WSGI
+</pre></div>
+</div>
+</section>
+<section id="details-des-tests">
+<h2>Détails des tests<a class="headerlink" href="#details-des-tests" title="Lien vers cette rubrique"></a></h2>
+<section id="test-asgi">
+<h3>1. Test ASGI<a class="headerlink" href="#test-asgi" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_asgi.py</span></code> vérifie que l’application ASGI est correctement chargée.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">config.asgi</span> <span class="kn">import</span> <span class="n">application</span>
+
+<span class="k">def</span> <span class="nf">test_asgi_application</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test if the ASGI application is loaded without errors.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - The ASGI application instance is not None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">application</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;ASGI application is None&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="test-wsgi">
+<h3>2. Test WSGI<a class="headerlink" href="#test-wsgi" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_wsgi.py</span></code> vérifie que l’application WSGI est correctement chargée.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">config.wsgi</span> <span class="kn">import</span> <span class="n">application</span>
+
+<span class="k">def</span> <span class="nf">test_wsgi_application</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test that the WSGI application is loaded without errors.</span>
+
+<span class="sd">    Assertions:</span>
+<span class="sd">        - The WSGI application instance is not None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">application</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;WSGI application is None&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="test-des-urls">
+<h3>3. Test des URLs<a class="headerlink" href="#test-des-urls" title="Lien vers cette rubrique"></a></h3>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">test_urls.py</span></code> contient des tests pour les routes globales et les namespaces associés aux applications. Il vérifie que les URLs peuvent être résolues correctement.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">SimpleTestCase</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">resolve</span>
+
+
+<span class="k">class</span> <span class="nc">ConfigUrlsTest</span><span class="p">(</span><span class="n">SimpleTestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tests for the URL configurations in the config directory.</span>
+
+<span class="sd">    Methods:</span>
+<span class="sd">        - test_profiles_namespace: Checks the &#39;profiles&#39; namespace.</span>
+<span class="sd">        - test_lettings_namespace: Checks the &#39;lettings&#39; namespace.</span>
+<span class="sd">        - test_homepage: Checks the namespace for the homepage.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">test_profiles_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Vérifie que l&#39;application &#39;profiles&#39; a un espace de nom &#39;profiles&#39;.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - The &#39;profiles:index&#39; URL resolves without errors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;profiles:index&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_lettings_namespace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Vérifie que l&#39;application &#39;lettings&#39; a un espace de nom &#39;lettings&#39;.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - The &#39;lettings:index&#39; URL resolves without errors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;lettings:index&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_homepage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Vérifie le namespace de la page d&#39;accueil.</span>
+
+<span class="sd">        Assertions:</span>
+<span class="sd">            - The &#39;oc_lettings_site:index&#39; URL resolves without errors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;oc_lettings_site:index&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="n">resolve</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Lien vers cette rubrique"></a></h2>
+<p>Les fichiers <code class="docutils literal notranslate"><span class="pre">settings.py</span></code> et <code class="docutils literal notranslate"><span class="pre">urls.py</span></code> jouent des rôles essentiels dans la gestion de l’application Django :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">settings.py</span></code> :</p>
+<ul>
+<li><p>Définit les paramètres globaux pour configurer les environnements de développement et de production.</p></li>
+<li><p>Gère les intégrations externes comme Sentry et WhiteNoise pour optimiser la journalisation et les fichiers statiques.</p></li>
+<li><p>Permet une personnalisation avancée via des variables d’environnement.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urls.py</span></code> :</p>
+<ul>
+<li><p>Centralise la gestion des routes du projet.</p></li>
+<li><p>Utilise l’inclusion pour déléguer les URLs spécifiques aux applications individuelles.</p></li>
+<li><p>Intègre des namespaces pour éviter les conflits entre les applications et pour faciliter la navigation.</p></li>
+</ul>
+</li>
+</ul>
+<p>Ces deux fichiers combinés assurent la flexibilité et la modularité de l’application, en permettant une configuration robuste et une gestion claire des routes. Leur bonne compréhension est essentielle pour maintenir et étendre l’application.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code>:</p></li>
+</ul>
+<p>Les tests dans <code class="docutils literal notranslate"><span class="pre">config/tests</span></code> garantissent que les composants critiques du répertoire <code class="docutils literal notranslate"><span class="pre">config</span></code> (ASGI, WSGI et URLs) fonctionnent correctement. Ils sont essentiels pour prévenir les régressions et assurer la stabilité du projet.</p>
+<p>Vous êtes maintenant prêt à explorer les applications du projet et leur structure spécifique.</p>
+</section>
 </section>
 
 

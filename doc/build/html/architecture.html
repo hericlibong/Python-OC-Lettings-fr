@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>architecture &mdash; Documentation Python OC Lettings 0.0.0.1</title>
+  <title>Architecture &mdash; Documentation Python OC Lettings 0.0.0.1</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Recherche" href="search.html" />
     <link rel="next" title="Usage" href="usage.html" />
-    <link rel="prev" title="installation" href="installation.html" /> 
+    <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,11 +45,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#arborescence">Arborescence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#applications">Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#statique-et-templates">Statique et Templates</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration Globale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration principale</a></li>
 <li class="toctree-l1"><a class="reference internal" href="application/index.html">Applications</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ci_cd.html">ci_cd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docker.html">docker</a></li>
@@ -69,7 +74,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">architecture</li>
+      <li class="breadcrumb-item active">Architecture</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/architecture.rst.txt" rel="nofollow"> Afficher la source de la page</a>
       </li>
@@ -80,15 +85,76 @@
            <div itemprop="articleBody">
              
   <section id="architecture">
-<h1>architecture<a class="headerlink" href="#architecture" title="Lien vers cette rubrique"></a></h1>
-<p>Ce document décrit l’architecture de l’application Python OC Lettings.</p>
+<h1>Architecture<a class="headerlink" href="#architecture" title="Lien vers cette rubrique"></a></h1>
+<p>Ce projet suit une architecture Django standard, organisée pour faciliter le développement et la maintenance.</p>
+<section id="arborescence">
+<h2>Arborescence<a class="headerlink" href="#arborescence" title="Lien vers cette rubrique"></a></h2>
+<p>Voici une vue d’ensemble des dossiers principaux du projet :</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Python-OC-Lettings-FR/
+├── config/                # Configuration principale (settings, urls, wsgi)
+├── lettings/              # Application pour les biens immobiliers
+├── profiles/              # Application pour les profils utilisateurs
+├── static/                # Fichiers statiques globaux (CSS, JS, images)
+├── templates/             # Templates partagés entre les applications
+├── manage.py              # Commande principale de gestion Django
+└── oc-lettings-site.sqlite3  # Base de données SQLite incluse
+</pre></div>
+</div>
+</section>
+<section id="applications">
+<h2>Applications<a class="headerlink" href="#applications" title="Lien vers cette rubrique"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">oc_lettings_site/</span></code> :</dt><dd><ul>
+<li><p>Fournit la vue et les routes pour la page d’accueil. Cette application ne contient pas de modèles.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">lettings/</span></code> :</dt><dd><ul>
+<li><p>Gère les biens immobiliers et leurs détails.</p></li>
+<li><dl class="simple">
+<dt>Structure typique :</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">models.py</span></code> : Définit les modèles de données pour les biens immobiliers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">views.py</span></code> : Logique métier pour gérer les annonces.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urls.py</span></code> : Routes spécifiques à cette application.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">admin.py</span></code> : Personnalisation de l’interface d’administration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code> : Tests unitaires pour cette application.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">templates/</span></code> : Templates HTML associés.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">apps.py</span></code> : Configuration de l’application.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">profiles/</span></code> :</dt><dd><ul>
+<li><p>Gère les profils utilisateurs.</p></li>
+<li><p>Structure similaire à <code class="docutils literal notranslate"><span class="pre">lettings</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="statique-et-templates">
+<h2>Statique et Templates<a class="headerlink" href="#statique-et-templates" title="Lien vers cette rubrique"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">static/</span></code> : Contient les fichiers statiques globaux (CSS, JS, images).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">templates/</span></code> : Regroupe les templates globaux du projet, partagés entre les applications.</p></li>
+</ul>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
-        <a href="installation.html" class="btn btn-neutral float-left" title="installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
         <a href="usage.html" class="btn btn-neutral float-right" title="Usage" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
