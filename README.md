@@ -18,11 +18,11 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 #### Cloner le repository
 
 - `cd /path/to/put/project/in`
-- `git clone https://github.com/OpenClassrooms-Student-Center/Python-OC-Lettings-FR.git`
+- `git clone https://github.com/hericlibong/Python-OC-Lettings-fr.git`
 
 #### Créer l'environnement virtuel
 
-- `cd /path/to/Python-OC-Lettings-FR`
+- `cd /path/to/Python-OC-Lettings-fr`
 - `python -m venv venv`
 - `apt-get install python3-venv` (Si l'étape précédente comporte des erreurs avec un paquet non trouvé sur Ubuntu)
 - Activer l'environnement `source venv/bin/activate`
@@ -34,7 +34,7 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 
 #### Exécuter le site
 
-- `cd /path/to/Python-OC-Lettings-FR`
+- `cd /path/to/Python-OC-Lettings-fr`
 - `source venv/bin/activate`
 - `pip install --requirement requirements.txt`
 - `python manage.py runserver`
@@ -43,19 +43,19 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 
 #### Linting
 
-- `cd /path/to/Python-OC-Lettings-FR`
+- `cd /path/to/Python-OC-Lettings-fr`
 - `source venv/bin/activate`
 - `flake8`
 
 #### Tests unitaires
 
-- `cd /path/to/Python-OC-Lettings-FR`
+- `cd /path/to/Python-OC-Lettings-fr`
 - `source venv/bin/activate`
 - `pytest`
 
 #### Base de données
 
-- `cd /path/to/Python-OC-Lettings-FR`
+- `cd /path/to/Python-OC-Lettings-fr`
 - Ouvrir une session shell `sqlite3`
 - Se connecter à la base de données `.open oc-lettings-site.sqlite3`
 - Afficher les tables dans la base de données `.tables`
