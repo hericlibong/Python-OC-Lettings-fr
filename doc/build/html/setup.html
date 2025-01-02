@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration de qualité du code et des tests &mdash; Documentation Python OC Lettings 0.0.0.1</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=1609ed55"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=e6b791cb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="Templates globaux" href="templates_globaux.html" />
+    <link rel="prev" title="Dockerfile : Explications" href="docker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Python OC Lettings
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration principale</a></li>
+<li class="toctree-l1"><a class="reference internal" href="application/index.html">Applications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ci_cd.html">Pipeline CI/CD avec Github Actions et Render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docker.html">Dockerfile : Explications</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration de qualité du code et des tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#flake8">Flake8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pytest">Pytest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coverage">Coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pydocstyle">Pydocstyle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pycodestyle">Pycodestyle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commandes-utiles">Commandes utiles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="templates_globaux.html">Templates globaux</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Python OC Lettings</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuration de qualité du code et des tests</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/setup.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration-de-qualite-du-code-et-des-tests">
+<h1>Configuration de qualité du code et des tests<a class="headerlink" href="#configuration-de-qualite-du-code-et-des-tests" title="Lien vers cette rubrique"></a></h1>
+<p>Le fichier <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> est situé à la racine du projet. Il permet de configurer plusieurs outils essentiels pour maintenir la qualité du code et gérer les tests. Voici une explication détaillée des différentes sections configurées dans ce fichier.</p>
+<section id="flake8">
+<h2>Flake8<a class="headerlink" href="#flake8" title="Lien vers cette rubrique"></a></h2>
+<p>Flake8 est un outil de vérification de style de code conforme à la PEP8.</p>
+<p>Configuration dans <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> :</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[flake8]</span>
+<span class="na">max-line-length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">99</span><span class="w">  </span><span class="c1"># Limite la longueur maximale des lignes à 99 caractères</span>
+<span class="na">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">**/migrations/*,venv, config/settings.py, doc/</span><span class="w">  </span><span class="c1"># Exclut certains dossiers et fichiers</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">max-line-length</span></code> : Définit une limite plus permissive pour la longueur des lignes afin d’améliorer la lisibilité.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exclude</span></code> : Ignore les dossiers et fichiers comme les migrations, l’environnement virtuel <code class="docutils literal notranslate"><span class="pre">venv</span></code>, et les fichiers liés à la documentation.</p></li>
+</ul>
+</section>
+<section id="pytest">
+<h2>Pytest<a class="headerlink" href="#pytest" title="Lien vers cette rubrique"></a></h2>
+<p>Pytest est utilisé pour exécuter les tests unitaires et fonctionnels.</p>
+<p>Configuration dans <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> :</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[tool:pytest]</span>
+<span class="na">DJANGO_SETTINGS_MODULE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">config.settings</span><span class="w">  </span><span class="c1"># Définit les paramètres Django pour les tests</span>
+<span class="na">python_files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">tests.py test_*.py *_tests.py</span><span class="w">  </span><span class="c1"># Détecte les fichiers de test</span>
+<span class="na">addopts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">-v</span><span class="w">  </span><span class="c1"># Exécute les tests avec une sortie détaillée</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DJANGO_SETTINGS_MODULE</span></code> : Charge les paramètres Django nécessaires pour l’exécution des tests.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">python_files</span></code> : Identifie les fichiers contenant les tests grâce à leurs noms.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">addopts</span></code> : Active un mode verbeux pour afficher plus d’informations pendant l’exécution des tests.</p></li>
+</ul>
+</section>
+<section id="coverage">
+<h2>Coverage<a class="headerlink" href="#coverage" title="Lien vers cette rubrique"></a></h2>
+<p>Coverage est utilisé pour mesurer la couverture des tests.</p>
+<p>Configuration dans <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> :</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[coverage:run]</span>
+<span class="na">omit</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="na">*/tests/*</span>
+<span class="w">    </span><span class="na">*/migrations/*</span>
+<span class="w">    </span><span class="na">manage.py</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">omit</span></code> : Exclut les fichiers non pertinents pour les rapports de couverture, comme les tests eux-mêmes, les migrations, et <code class="docutils literal notranslate"><span class="pre">manage.py</span></code>.</p></li>
+</ul>
+</section>
+<section id="pydocstyle">
+<h2>Pydocstyle<a class="headerlink" href="#pydocstyle" title="Lien vers cette rubrique"></a></h2>
+<p>Pydocstyle vérifie la qualité des docstrings selon les conventions PEP257.</p>
+<p>Configuration dans <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> :</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[pydocstyle]</span>
+<span class="na">match</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">(models|views|urls)\.py$</span><span class="w">  </span><span class="c1"># Analyse uniquement les fichiers models.py, views.py, et urls.py</span>
+<span class="na">match-dir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">lettings|profiles|oc_lettings_site</span><span class="w">  </span><span class="c1"># Limite l&#39;analyse aux dossiers principaux</span>
+<span class="na">ignore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">D203, D204, D212, D406, D407, D413</span><span class="w">  </span><span class="c1"># Ignore certaines règles spécifiques</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">match</span></code> : Restreint l’analyse aux fichiers essentiels comme <code class="docutils literal notranslate"><span class="pre">models.py</span></code>, <code class="docutils literal notranslate"><span class="pre">views.py</span></code>, et <code class="docutils literal notranslate"><span class="pre">urls.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">match-dir</span></code> : Limite l’analyse aux dossiers principaux (<code class="docutils literal notranslate"><span class="pre">lettings</span></code>, <code class="docutils literal notranslate"><span class="pre">profiles</span></code>, et <code class="docutils literal notranslate"><span class="pre">oc_lettings_site</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ignore</span></code> : Désactive certaines règles comme D203 (lignes vides) et D204 (description en une ligne).</p></li>
+</ul>
+</section>
+<section id="pycodestyle">
+<h2>Pycodestyle<a class="headerlink" href="#pycodestyle" title="Lien vers cette rubrique"></a></h2>
+<p>Pycodestyle est un autre outil pour vérifier le style de code.</p>
+<p>Configuration dans <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> :</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[pycodestyle]</span>
+<span class="na">max-line-length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">99</span><span class="w">  </span><span class="c1"># Autorise jusqu&#39;à 99 caractères par ligne</span>
+<span class="na">exclude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">*/migrations/*, */tests/*, venv/</span><span class="w">  </span><span class="c1"># Ignore certains dossiers et fichiers</span>
+</pre></div>
+</div>
+<p><strong>Explications</strong> :</p>
+<ul class="simple">
+<li><p>Similaire à Flake8, mais spécifique à l’analyse de style.</p></li>
+</ul>
+</section>
+<section id="commandes-utiles">
+<h2>Commandes utiles<a class="headerlink" href="#commandes-utiles" title="Lien vers cette rubrique"></a></h2>
+<p>Voici des commandes pratiques pour exécuter les outils configurés :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Vérifier le style avec Flake8</span>
+flake8<span class="w"> </span>.
+
+<span class="c1"># Lancer les tests avec Pytest</span>
+pytest
+
+<span class="c1"># Vérifier la couverture avec Coverage</span>
+pytest<span class="w"> </span>--cov<span class="o">=</span>.
+
+<span class="c1"># Vérifier les docstrings avec Pydocstyle</span>
+pydocstyle
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="docker.html" class="btn btn-neutral float-left" title="Dockerfile : Explications" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="templates_globaux.html" class="btn btn-neutral float-right" title="Templates globaux" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Droits d'auteur 2024, Heric Libong.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

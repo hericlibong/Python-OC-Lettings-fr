@@ -23,4 +23,6 @@ documentation for details.
    application/index
    ci_cd
    docker
+   setup
+   templates_globaux
 

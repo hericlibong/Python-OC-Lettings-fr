@@ -12,8 +12,8 @@ sys.path.insert(0, os.path.abspath('../..'))  # Ajout du chemin du projet pour a
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Python OC Lettings'
-copyright = '2024, Heric'
-author = 'Heric'
+copyright = '2024, Heric Libong'
+author = 'Heric Libong'
 release = '0.0.0.1'
 
 # -- General configuration ---------------------------------------------------
