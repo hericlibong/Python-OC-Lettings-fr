@@ -79,18 +79,20 @@ Le projet inclut une architecture modulaire avec trois applications principales 
 ### Accès à l'application
 - Page d'accueil : [http://localhost:8000/](http://localhost:8000/)
 - Panel d'administration : [http://localhost:8000/admin](http://localhost:8000/admin)
+- Connectez-vous avec l'utilisateur `admin`, mot de passe `Abc1234!`
 
 ### Déploiement avec Docker
+
 Pour créer une image Docker localement :
 ```bash
-```
-
-```markdown
 docker build -t orange-county-lettings .
+```
 
 Pour exécuter le conteneur Docker :
 
+```bash
 docker run -p 8000:8000 orange-county-lettings
+```
 
 ## Informations complémentaires
 
@@ -123,4 +125,4 @@ La documentation complète est disponible sur [Read the Docs](https://orange-cou
 ### Auteur
 
 Créé par Heric Libong dans le cadre du projet P13 d'OpenClassrooms.
-```
+
