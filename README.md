@@ -57,17 +57,8 @@ Le projet inclut une architecture modulaire avec trois applications principales 
     SENTRY_DSN="votre_dsn_sentry"
     ```
 
-4. Lancez les migrations :
-    ```bash
-    python manage.py migrate
-    ```
 
-5. Collectez les fichiers statiques :
-    ```bash
-    python manage.py collectstatic --noinput
-    ```
-
-6. Démarrez le serveur de développement :
+4. Démarrez le serveur de développement :
     ```bash
     python manage.py runserver
     ```
